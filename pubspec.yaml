@@ -1,0 +1,97 @@
+name: alhawta
+description: "A new Flutter project."
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ------------------------------------------------------ #
+
+  # ICONS
+  iconsax: ^0.0.8
+
+  # NETWORK CALL
+  #http: ^1.2.0
+
+  # STATE MANAGEMENT + DI + NAVIGATION BETWEEN SCREENS + MULTIPLE LANGUAGES
+  get: ^4.6.6
+
+  # LOCAL STORAGE
+  get_storage: ^2.1.1
+
+  # FIREBASE
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.17.3
+  firebase_storage: ^11.6.0
+  cloud_firestore: ^4.17.1
+  google_sign_in: ^6.2.1
+
+  # BOTTOM NAV BAR
+  awesome_bottom_bar: ^1.2.4
+
+  # ANIMATION
+  #lottie: ^3.1.0
+
+  # ANIMATION
+  widget_and_text_animator: ^1.1.5
+
+  # NAVIGATE OUTSIDE THE APP
+  url_launcher: ^6.2.6
+
+  # CHECK NETWORK
+  connectivity_plus: ^5.0.2
+
+  # SPLASH SCREEN
+  #flutter_native_splash: ^2.3.8
+
+  # SNACK BAR
+
+  # PERMISSION
+  permission_handler: ^11.3.0
+
+  # IMAGE PICKER
+  image_picker: ^1.0.0
+
+  # CHANGE APP ICON
+  #flutter_launcher_icons: ^0.13.1
+
+  # OTHERS
+  intl_phone_field: ^3.2.0
+  device_info_plus: ^8.0.0
+  readmore: ^2.2.0
+  carousel_slider: ^4.2.1
+
+# ------------------------------------------------------ #
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/images/
+    - assets/images/categories/
+    - assets/
+
+  fonts:
+    - family: Pop
+      fonts:
+        - asset: assets/fonts/Poppins.ttf
+    - family: Pop_Semi_Bold
+      fonts:
+        - asset: assets/fonts/Poppins_Semi_Bold.ttf
+    - family: Pop_Bold
+      fonts:
+        - asset: assets/fonts/Poppins_Bold.ttf
