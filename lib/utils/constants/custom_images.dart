@@ -5,6 +5,7 @@ static const String SHOPPING = "assets/images/shopping.png";
 static const String FOGOT_PASSWORD = "assets/images/forgot_password.png";
 static const String WOMAN_DO_SHOPPING = "assets/images/woman_do_shopping.jpg";
 static const String LOGO = "assets/images/logo.png";
+static const String WHATSAPP = "assets/images/whatsapp_img_white.webp";
 
 // CATEGORIES
 static const String CATEGORY_ALL = "assets/images/categories/all.png";
