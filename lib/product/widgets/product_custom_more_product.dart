@@ -1,4 +1,3 @@
-import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -7,7 +6,7 @@ import '../../utils/constants/custom_sizes.dart';
 
 class ProductCustomMoreProduct extends CustomState {
   final String imgUri, title, description;
-  final Function(int id) onClick;
+  final Function(String id) onClick;
   final int price;
   final bool isLiked;
   final Color? bgColor;
@@ -43,7 +42,7 @@ class ProductCustomMoreProduct extends CustomState {
         ),
       ),
       child: InkWell(
-        onTap: () => { onClick(3) },
+        onTap: () => { onClick("id:3") },
         child: Padding(
           padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
           // - - - - - - - - - - - - - - - - - - COLUMN - - - - - - - - - - - - - - - - - -  //
@@ -78,18 +77,14 @@ class ProductCustomMoreProduct extends CustomState {
                                 borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
                             child: Icon(Iconsax.gallery_remove, size: 30.0, color: grayColor(context))),
                       )),
-                  InkWell(
-                    onTap: (){ onClick(3); },
-                    overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
-                    child: Container(
-                        height: 20,
-                        width: 20,
-                        margin: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                        decoration: BoxDecoration(
-                            color: grayColor(context).withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)),
-                        child: Icon(isLiked ? Iconsax.heart5 : Iconsax.heart, size: 12, color: isLiked ? redColor(context) : darkLightColor(context))
-                    ),
+                  Container(
+                      height: 20,
+                      width: 20,
+                      margin: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                      decoration: BoxDecoration(
+                          color: grayColor(context).withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)),
+                      child: Icon(isLiked ? Iconsax.heart5 : Iconsax.heart, size: 12, color: isLiked ? redColor(context) : darkLightColor(context))
                   )
                 ],
               ),
@@ -97,13 +92,13 @@ class ProductCustomMoreProduct extends CustomState {
               Text(
                 title,
                 maxLines: 1,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", fontSize: 12.0, letterSpacing: 1),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", fontSize: 12.0),
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
                 description,
                 maxLines: 1,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10.0),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10.0, fontWeight: FontWeight.normal, color: grayColor(context)),
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -113,7 +108,7 @@ class ProductCustomMoreProduct extends CustomState {
                   Text(
                     "$price DH",
                     maxLines: 1,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", fontSize: 14.0),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold", fontSize: 14.0),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Container(

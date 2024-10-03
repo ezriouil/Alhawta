@@ -61,11 +61,15 @@ dependencies:
   # CHANGE APP ICON
   #flutter_launcher_icons: ^0.13.1
 
+  # ADS
+  google_mobile_ads: ^4.0.0
+
   # OTHERS
   intl_phone_field: ^3.2.0
   device_info_plus: ^8.0.0
   readmore: ^2.2.0
   carousel_slider: ^4.2.1
+  flutter_screenutil: ^5.9.3
 
 # ------------------------------------------------------ #
 

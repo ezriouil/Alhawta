@@ -79,7 +79,7 @@ class CategoriesScreen extends CustomState {
               ),
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3)
             ],
-                      ),
+            ),
         ),
       )
     );
