@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:alhawta/auth/forgot_password/forgot_password_controller.dart';
 import 'package:alhawta/auth/forgot_password/forgot_password_screen.dart';
 import 'package:alhawta/auth/login/login_controller.dart';
@@ -20,9 +18,11 @@ import 'package:alhawta/profile/profile_controller.dart';
 import 'package:alhawta/profile/profile_screen.dart';
 import 'package:alhawta/settings/settings_controller.dart';
 import 'package:alhawta/settings/settings_screen.dart';
+import 'package:alhawta/utils/ads/custom_admob.dart';
 import 'package:alhawta/utils/theme/theme_app.dart';
 import 'package:alhawta/wishlist/wishList_controller.dart';
 import 'package:alhawta/wishlist/wishList_screen.dart';
+import 'package:applovin_max/applovin_max.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,11 +34,27 @@ import 'home/home_controller.dart';
 
 void main() async {
 
+  // - - - - - - - - - - - - - - - - - - INITIALISATION - - - - - - - - - - - - - - - - - -  //
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  //MaxConfiguration? sdkConfiguration = await AppLovinMAX.initialize("h7FmU5xwBLUQ_qeEAXhZ0gLo3wb6a28SGswVr7fSaKsXn1flpoMbwLlkp74cBDHAZV04qlP3X9Jcy1hUgbsdv3");
 
   // - - - - - - - - - - - - - - - - - - HIDE THE TOP STATUS BAR AND SYSTEM BOTTOM BAR - - - - - - - - - - - - - - - - - -  //
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+  // - - - - - - - - - - - - - - - - - - SHOW ADMOB APP OPEN - - - - - - - - - - - - - - - - - -  //
+  CustomAdmob.appOpen(
+      onAdLoaded: (AppOpenAd ad){
+        try{
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdFailedToShowFullScreenContent: (ad, error){ ad.dispose(); },
+            onAdDismissedFullScreenContent: (ad){ ad.dispose(); },
+          );
+          ad.show();
+        }catch(_){}
+      },
+      onAdFailedToLoad: (LoadAdError error){}
+  );
 
   runApp(const Alhawta());
 }

@@ -62,7 +62,9 @@ dependencies:
   #flutter_launcher_icons: ^0.13.1
 
   # ADS
-  google_mobile_ads: ^4.0.0
+  google_mobile_ads: ^5.0.0
+  applovin_max: ^4.0.0
+  facebook_audience_network: ^1.0.1
 
   # OTHERS
   intl_phone_field: ^3.2.0

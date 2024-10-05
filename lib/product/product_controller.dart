@@ -11,54 +11,38 @@ import 'package:url_launcher/url_launcher.dart';
 class ProductController extends GetxController {
 
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
-  late RxBool isInWishList, isBannerAdLoaded;
-  late BannerAd bannerAd;
-  late InterstitialAd? interstitialAd;
+  late RxBool isInWishList, admobIsBannerAdLoaded, admobIsNativeAdLoaded;
+  late BannerAd admobBannerAd;
+  late NativeAd admobNativeAd;
+  late InterstitialAd? admobInterstitialAd;
+  late RewardedAd? admobRewardedAd;
+  late RewardedInterstitialAd? admobRewardedInterstitialAd;
 
   // - - - - - - - - - - - - - - - - - - INIT STATES - - - - - - - - - - - - - - - - - -  //
   @override
   void onInit() async{
     super.onInit();
     isInWishList = false.obs;
-    isBannerAdLoaded = false.obs;
-    interstitialAd = null;
+    admobIsBannerAdLoaded = false.obs;
+    admobIsNativeAdLoaded = false.obs;
+    admobInterstitialAd = null;
+    admobRewardedAd = null;
+    admobRewardedInterstitialAd = null;
     init();
   }
 
   // - - - - - - - - - - - - - - - - - - INIT - - - - - - - - - - - - - - - - - -  //
-  init() async{
-
-    bannerAd = CustomAdmob.banner(
-      onAdFailedToLoad: (Ad ad, LoadAdError loadAdError){ isBannerAdLoaded.value = false; },
-      onAdLoaded: (Ad ad){ isBannerAdLoaded.value = true; },
-    );
-    await bannerAd.load();
-
-    CustomAdmob.interstitial(
-        onAdLoaded: (InterstitialAd ad){ interstitialAd = ad; },
-        onAdFailedToLoad: (LoadAdError loadAdError){ interstitialAd = null; }
-    );
-
-  }
+  init() async{}
 
   // - - - - - - - - - - - - - - - - - -  CONTACT VIA WHATSAPP - - - - - - - - - - - - - - - - - -  //
   void onContact({ required BuildContext context }) async {
 
-    if(interstitialAd == null) return;
-    interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (InterstitialAd ad){CustomAdmob.interstitial(
-          onAdLoaded: (InterstitialAd ad){ interstitialAd = ad; },
-          onAdFailedToLoad: (LoadAdError loadAdError){ interstitialAd = null; }
-      );},
-      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error){CustomAdmob.interstitial(
-          onAdLoaded: (InterstitialAd ad){ interstitialAd = ad; },
-          onAdFailedToLoad: (LoadAdError loadAdError){ interstitialAd = null; }
-      );},
-    );
-    interstitialAd!.show();
+    //admobSetupInterstitial();
+    //admobSetupReward();
+    //admobSetupRewardInterstitial();
 
     await showDialog(
-        context: context,
+        context: context.mounted ? context : context,
         barrierDismissible: false,
         builder: (BuildContext innerContext) => AlertDialog(
           contentPadding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
@@ -154,5 +138,65 @@ class ProductController extends GetxController {
 
   // - - - - - - - - - - - - - - - - - - INSERT OR DELETE PRODUCT FROM WISHLIST - - - - - - - - - - - - - - - - - -  //
   void onUpsertToWishlist() { isInWishList.value = !isInWishList.value; }
+
+  // - - - - - - - - - - - - - - - - - -  ADMOB - - - - - - - - - - - - - - - - - -  //
+  /* ADMOB BANNER */
+  void admobSetupBanner() async{
+    admobBannerAd = CustomAdmob.banner(
+      onAdLoaded: (Ad ad){ admobIsBannerAdLoaded.value = true; },
+      onAdFailedToLoad: (Ad ad, LoadAdError loadAdError){ admobIsBannerAdLoaded.value = false; },
+    );
+    await admobBannerAd.load();
+  }
+  /* ADMOB NATIVE */
+  void admobSetupNative() async{
+    admobNativeAd = CustomAdmob.native(
+        onAdLoaded: (Ad ad){ admobIsNativeAdLoaded.value = true; },
+        onAdFailedToLoad: (Ad ad, LoadAdError load){ admobIsNativeAdLoaded.value = false; }
+    );
+    await admobNativeAd.load();
+  }
+  /* ADMOB INTERSTITIAL */
+  void admobSetupInterstitial() {
+    CustomAdmob.interstitial(
+        onAdLoaded: (InterstitialAd ad){
+          admobInterstitialAd = ad;
+          admobInterstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (InterstitialAd ad){ admobInterstitialAd!.dispose(); },
+            onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error){ admobInterstitialAd!.dispose(); },
+          );
+          admobInterstitialAd!.show();
+        },
+        onAdFailedToLoad: (LoadAdError loadAdError){ admobInterstitialAd!.dispose(); }
+    );
+  }
+  /* ADMOB REWARD */
+  void admobSetupReward() {
+    CustomAdmob.reward(
+        onAdLoaded: (RewardedAd ad){
+          admobRewardedAd = ad;
+          admobRewardedAd!.fullScreenContentCallback= FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (RewardedAd ad){ admobRewardedAd!.dispose(); },
+            onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error){ admobRewardedAd!.dispose(); },
+          );
+          admobRewardedAd!.show(onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {});
+        },
+        onAdFailedToLoad: (LoadAdError loadAdError){ admobRewardedAd!.dispose(); }
+    );
+  }
+  /* ADMOB REWARD INTERSTITIAL */
+  void admobSetupRewardInterstitial() {
+    CustomAdmob.rewardInterstitial(
+        onAdLoaded: (RewardedInterstitialAd ad){
+          admobRewardedInterstitialAd = ad;
+          admobRewardedInterstitialAd!.fullScreenContentCallback= FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (RewardedInterstitialAd ad){ admobRewardedInterstitialAd!.dispose(); },
+            onAdFailedToShowFullScreenContent: (RewardedInterstitialAd ad, AdError error){ admobRewardedInterstitialAd!.dispose(); },
+          );
+          admobRewardedInterstitialAd!.show(onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {});
+        },
+        onAdFailedToLoad: (LoadAdError loadAdError){ admobRewardedInterstitialAd!.dispose(); }
+    );
+  }
 
 }

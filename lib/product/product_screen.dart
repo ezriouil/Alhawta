@@ -89,6 +89,21 @@ class ProductScreen extends CustomState {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Obx(
+                      () => ConstrainedBox(
+                          constraints: const BoxConstraints(
+                  minWidth: 320,
+                  minHeight: 90,
+                  maxWidth: double.infinity,
+                  maxHeight: 110,
+                ),
+                          child: controller.admobIsNativeAdLoaded.isTrue
+                              ? AdWidget(ad: controller.admobNativeAd)
+                              : Center(child: Text("AD Loading", style: Theme.of(context).textTheme.bodyLarge)
+                          )
+                      )
+              ),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
               const ProductCustomTitleIcon(title: "Info"),
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
               const ProductCustomDivider(),
@@ -119,7 +134,10 @@ class ProductScreen extends CustomState {
                     () => SizedBox(
                       height: 50.0,
                       width: getWidth(context),
-                      child: controller.isBannerAdLoaded.isTrue ? AdWidget(ad: controller.bannerAd) : Center(child: Text("AD Loading", style: Theme.of(context).textTheme.bodyLarge)),
+                      child: controller.admobIsBannerAdLoaded.isTrue
+                          ? AdWidget(ad: controller.admobBannerAd)
+                          : Center(child: Text("AD Loading", style: Theme.of(context).textTheme.bodyLarge)
+                      ),
                     ),
               ),
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),

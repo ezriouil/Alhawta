@@ -13,6 +13,9 @@
    <key>GADApplicationIdentifier</key>
    <string>ca-app-pub-8391987150149440~8609790861</string>
 
+  <key>NSAdvertisingAttributionReportEndpoint</key>
+  <string>https://postbacks-app.com</string>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

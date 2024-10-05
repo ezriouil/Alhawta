@@ -22,7 +22,7 @@ class CustomColors{
   static const PURPLE_LIGHT= Color(0xFFCC99FF);
   static const PURPLE_DARK = Color(0xFF660066);
 
-  static const BLUE_LIGHT = Color(0xFF6699FF);
+  static const BLUE_LIGHT = Color(0xFF0077FF);
   static const BLUE_DARK = Color(0xFF000066);
 
   static const YELLOW_LIGHT = Color(0xFFFFFF95);
