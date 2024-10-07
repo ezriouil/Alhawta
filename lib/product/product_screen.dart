@@ -3,6 +3,8 @@ import 'package:alhawta/product/widgets/product_custom_icon_btn.dart';
 import 'package:alhawta/product/widgets/product_custom_info_tile.dart';
 import 'package:alhawta/product/widgets/product_custom_more_product.dart';
 import 'package:alhawta/product/widgets/product_custom_title_icon.dart';
+import 'package:alhawta/utils/ads/custom_facebook.dart';
+import 'package:alhawta/utils/ads/custom_unity.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_images.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
@@ -92,17 +94,20 @@ class ProductScreen extends CustomState {
               Obx(
                       () => ConstrainedBox(
                           constraints: const BoxConstraints(
-                  minWidth: 320,
-                  minHeight: 90,
-                  maxWidth: double.infinity,
-                  maxHeight: 110,
-                ),
+                            minWidth: 320,
+                            minHeight: 90,
+                            maxWidth: double.infinity,
+                            maxHeight: 110,
+                          ),
                           child: controller.admobIsNativeAdLoaded.isTrue
                               ? AdWidget(ad: controller.admobNativeAd)
                               : Center(child: Text("AD Loading", style: Theme.of(context).textTheme.bodyLarge)
                           )
                       )
               ),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+              CustomUnity.banner(),
+              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
               const SizedBox(height: CustomSizes.SPACE_DEFAULT),
               const ProductCustomTitleIcon(title: "Info"),
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),

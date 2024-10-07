@@ -6,6 +6,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class CustomAdmob{
   CustomAdmob._();
 
+  /* SETUP */
+  static void setup() async{ await MobileAds.instance.initialize(); }
+
   // - - - - - - - - - - - - - - - - - - BANNER - - - - - - - - - - - - - - - - - -  //
   static BannerAd banner({ required void Function(Ad)? onAdLoaded, required void Function(Ad, LoadAdError)? onAdFailedToLoad  }) {
     const androidAdUnitId = "ca-app-pub-3940256099942544/6300978111";
@@ -47,8 +50,7 @@ class CustomAdmob{
     await AppOpenAd.load(
         adUnitId: adUnitId,
         request: const AdRequest(),
-        adLoadCallback: AppOpenAdLoadCallback(onAdLoaded: onAdLoaded, onAdFailedToLoad: onAdFailedToLoad),
-        orientation: AppOpenAd.orientationPortrait
+        adLoadCallback: AppOpenAdLoadCallback(onAdLoaded: onAdLoaded, onAdFailedToLoad: onAdFailedToLoad)
     );
   }
 

@@ -9,17 +9,16 @@ class CustomFacebook{
   /* SETUP */
   static void setup() async{
     await FacebookAudienceNetwork.init(
-        testingId: "37b1da9d-b48c-4103-a393-2e095e734bd6",
-        iOSAdvertiserTrackingEnabled: true
+        testingId: "37b1da9d-b48c-4103-a393-2e095e734bd6", //optional
+        iOSAdvertiserTrackingEnabled: true //default false
     );
   }
 
   // - - - - - - - - - - - - - - - - - - BANNER - - - - - - - - - - - - - - - - - -  //
   static FacebookBannerAd banner(){
     return FacebookBannerAd(
-      placementId: Platform.isAndroid ? "YOUR_ANDROID_PLACEMENT_ID" : "YOUR_IOS_PLACEMENT_ID",
+      placementId: Platform.isAndroid ? "IMG_16_9_APP_INSTALL#1165407034550142_1165407731216739" : "YOUR_IOS_PLACEMENT_ID",
       bannerSize: BannerSize.STANDARD,
-      keepAlive: true,
       listener: (result, value) {
         switch (result) {
           case BannerAdResult.ERROR:

@@ -29,8 +29,10 @@ dependencies:
   firebase_core: ^2.24.2
   firebase_auth: ^4.17.3
   firebase_storage: ^11.6.0
-  cloud_firestore: ^4.17.1
   google_sign_in: ^6.2.1
+
+  #APP WRITE
+  appwrite: ^12.0.0
 
   # BOTTOM NAV BAR
   awesome_bottom_bar: ^1.2.4
@@ -63,12 +65,12 @@ dependencies:
 
   # ADS
   google_mobile_ads: ^5.0.0
-  applovin_max: ^4.0.0
+  unity_ads_plugin: ^0.3.20
   facebook_audience_network: ^1.0.1
 
   # OTHERS
   intl_phone_field: ^3.2.0
-  device_info_plus: ^8.0.0
+  #device_info_plus: ^8.0.0
   readmore: ^2.2.0
   carousel_slider: ^4.2.1
   flutter_screenutil: ^5.9.3

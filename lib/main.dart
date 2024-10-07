@@ -19,10 +19,11 @@ import 'package:alhawta/profile/profile_screen.dart';
 import 'package:alhawta/settings/settings_controller.dart';
 import 'package:alhawta/settings/settings_screen.dart';
 import 'package:alhawta/utils/ads/custom_admob.dart';
+import 'package:alhawta/utils/ads/custom_facebook.dart';
+import 'package:alhawta/utils/ads/custom_unity.dart';
 import 'package:alhawta/utils/theme/theme_app.dart';
 import 'package:alhawta/wishlist/wishList_controller.dart';
 import 'package:alhawta/wishlist/wishList_screen.dart';
-import 'package:applovin_max/applovin_max.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,10 +35,13 @@ import 'home/home_controller.dart';
 
 void main() async {
 
-  // - - - - - - - - - - - - - - - - - - INITIALISATION - - - - - - - - - - - - - - - - - -  //
+  // - - - - - - - - - - - - - - - - - - INITIALISATION WIDGETS - - - - - - - - - - - - - - - - - -  //
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-  //MaxConfiguration? sdkConfiguration = await AppLovinMAX.initialize("h7FmU5xwBLUQ_qeEAXhZ0gLo3wb6a28SGswVr7fSaKsXn1flpoMbwLlkp74cBDHAZV04qlP3X9Jcy1hUgbsdv3");
+
+  // - - - - - - - - - - - - - - - - - - INITIALISATION ADS - - - - - - - - - - - - - - - - - -  //
+  CustomAdmob.setup();
+  CustomUnity.setup();
+  CustomFacebook.setup();
 
   // - - - - - - - - - - - - - - - - - - HIDE THE TOP STATUS BAR AND SYSTEM BOTTOM BAR - - - - - - - - - - - - - - - - - -  //
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -93,7 +97,6 @@ class Alhawta extends StatelessWidget {
     );
   }
 }
-
 
 /* ------ INJECT DEPENDENCIES ------ */
 class RootBinding implements Bindings {
