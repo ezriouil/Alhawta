@@ -3,9 +3,12 @@ import 'package:alhawta/home/widgets/home_custom_icon_btn.dart';
 import 'package:alhawta/home/widgets/home_custom_product.dart';
 import 'package:alhawta/home/widgets/home_custom_text_icon_btn.dart';
 import 'package:alhawta/index/index_controller.dart';
+import 'package:alhawta/product/product_screen.dart';
+import 'package:alhawta/utils/ads/custom_unity.dart';
 import 'package:alhawta/utils/constants/custom_images.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,8 +41,6 @@ class HomeScreen extends CustomState {
                       HomeCustomIconBtn(onPressed: (){ IndexController.currentIndex.value = 1; }, icon: Iconsax.filter),
                       const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                       HomeCustomIconBtn(onPressed: (){ Get.to( () => const FilterScreen(), arguments: "All" ); }, icon: Iconsax.search_normal),
-                      const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                      HomeCustomIconBtn(onPressed: (){ controller.onCloseTheApp(context: context); }, icon: Iconsax.arrow_right_3),
                     ],
                   ),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -68,18 +69,45 @@ class HomeScreen extends CustomState {
                           child: InkWell(
                             overlayColor: MaterialStateProperty.all<Color>(CustomColors.TRANSPARENT),
                             onTap: (){},
-                            child: Image.network(
-                                controller.carouselImages[index],
-                                fit: BoxFit.cover,
-                                height: getWidth(context),
-                                width: getWidth(context)),
+                            child: CachedNetworkImage(
+                              imageUrl: controller.carouselImages[index],
+                              height: getHeight(context),
+                              width: getWidth(context),
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder: (context, url, downloadProgress){
+                                return Container(
+                                    width: getWidth(context),
+                                    height: 170,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: grayColor(context)),
+                                        borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(width: 28, height: 28, child: CircularProgressIndicator(strokeWidth: 1, color: darkLightColor(context), backgroundColor: grayColor(context), value: downloadProgress.progress)),
+                                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                                        Text(downloadProgress.progress != null ? "${(downloadProgress.progress! * 100).toStringAsFixed(2)} %" : "Loading", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 14.0, fontWeight: FontWeight.w300))
+                                      ],
+                                    )
+                                );
+                              },
+                              errorWidget: (context, url, error) => Container(
+                                  width: getWidth(context),
+                                  height: 170,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: grayColor(context)),
+                                      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)),
+                                  child: Icon(Iconsax.gallery_remove, size: 30.0, color: grayColor(context))),
+                            ),
                           ),
                         ),
                   ),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
                   Row(
                     children: [
-                      Text("Anonce Premium", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", letterSpacing: 1)),
+                      Text("Announce Premium", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", wordSpacing: 1)),
                       const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                       const Icon(Iconsax.star5, color: CustomColors.GOLD, size: 22)
                     ],
@@ -89,29 +117,24 @@ class HomeScreen extends CustomState {
             ),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
             SizedBox(
-              height: 210,
+              height: 200,
               child: ListView.builder(
                   itemCount: 2,
                   padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) =>
                       HomeCustomProduct(
-                        imgUri: 'https://yourdesignstore.s3.amazonaws.com/uploads/yds/productImages/thumb/17119587213301Main-Product-Image.jpg',
+                        imgUri: 'https://images.pexels.com/photos/40896/larch-conifer-cone-branch-tree-40896.jpeg?auto=compress&cs=tinysrgb&w=1200',
                         title: "Jacket noir",
                         description: "Une jacket avec bon état pouvez-vous contacter moi.",
-                        onClick: (id){},
+                        onClick: (id){ Get.to( () => const ProductScreen(), arguments: id); },
                         price: 200,
                         isLiked: false,
                         bgColor: CustomColors.GOLD,
                       )),
             ),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-            Container(
-              height: 60,
-              width: getWidth(context),
-              color: greenColor(context),
-              child: Center(child: Text("Ad banner", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkDarkLightLightColor(context)))),
-            ),
+            CustomUnity.banner(),
             const SizedBox(height: CustomSizes.SPACE_DEFAULT),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -121,7 +144,7 @@ class HomeScreen extends CustomState {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("New Added", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", letterSpacing: 1)),
+                    Text("New Added", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", wordSpacing: 1)),
                     Text("View All", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", color: greenColor(context), fontSize: 12.0)),
                   ],
                 ),
@@ -129,29 +152,23 @@ class HomeScreen extends CustomState {
             ),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
             SizedBox(
-              height: 210,
+              height: 200,
               child: ListView.builder(
                   itemCount: 8,
                   padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) =>
                       HomeCustomProduct(
-                          imgUri:
-                          'https://yourdesignstore.s3.amazonaws.com/uploads/yds/productImages/thumb/17119587213301Main-Product-Image.jpg',
+                          imgUri: 'https://images.pexels.com/photos/4275890/pexels-photo-4275890.jpeg?auto=compress&cs=tinysrgb&w=1200',
                           title: "Jacket noir",
                           description: "Une jacket avec bon état pouvez-vous contacter moi.",
-                          onClick: (id){},
+                          onClick: (id){ Get.to( () => const ProductScreen(), arguments: id); },
                           isLiked: false,
                           price: 200
                       )),
             ),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-            Container(
-              height: 60,
-              width: getWidth(context),
-              color: greenColor(context),
-              child: Center(child: Text("Ad banner", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkDarkLightLightColor(context)))),
-            ),
+            CustomUnity.banner(),
             const SizedBox(height: CustomSizes.SPACE_DEFAULT),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -161,7 +178,7 @@ class HomeScreen extends CustomState {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Top Collections", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", letterSpacing: 1)),
+                    Text("Top Collections", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", wordSpacing: 1)),
                     Text("View All", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", color: greenColor(context), fontSize: 12.0)),
                   ],
                 ),
@@ -169,29 +186,23 @@ class HomeScreen extends CustomState {
             ),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
             SizedBox(
-              height: 210,
+              height: 200,
               child: ListView.builder(
                   itemCount: 8,
                   padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) =>
                       HomeCustomProduct(
-                          imgUri:
-                          'https://yourdesignstore.s3.amazonaws.com/uploads/yds/productImages/thumb/17119587213301Main-Product-Image.jpg',
+                          imgUri: 'https://images.pexels.com/photos/4275890/pexels-photo-4275890.jpeg?auto=compress&cs=tinysrgb&w=1200',
                           title: "Jacket noir",
                           description: "Une jacket avec bon état pouvez-vous contacter moi.",
-                          onClick: (id){},
+                          onClick: (id){ Get.to( () => const ProductScreen(), arguments: id); },
                           isLiked: false,
                           price: 200
                       )),
             ),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-            Container(
-              height: 60,
-              width: getWidth(context),
-              color: greenColor(context),
-              child: Center(child: Text("Ad banner", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkDarkLightLightColor(context)))),
-            ),
+            CustomUnity.banner(),
             const SizedBox(height: CustomSizes.SPACE_DEFAULT),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -201,7 +212,7 @@ class HomeScreen extends CustomState {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Products", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", letterSpacing: 1)),
+                    Text("Products", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", wordSpacing: 1)),
                     Text("View All", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", color: greenColor(context), fontSize: 12.0)),
                   ],
                 ),
@@ -209,31 +220,25 @@ class HomeScreen extends CustomState {
             ),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
             SizedBox(
-              height: 210,
+              height: 200,
               child: ListView.builder(
                   itemCount: 8,
                   padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) =>
                       HomeCustomProduct(
-                          imgUri:
-                          'https://yourdesignstore.s3.amazonaws.com/uploads/yds/productImages/thumb/17119587213301Main-Product-Image.jpg',
+                          imgUri: 'https://images.pexels.com/photos/4275890/pexels-photo-4275890.jpeg?auto=compress&cs=tinysrgb&w=1200',
                           title: "Jacket noir",
                           description: "Une jacket avec bon état pouvez-vous contacter moi.",
-                          onClick: (id){},
+                          onClick: (id){ Get.to( () => const ProductScreen(), arguments: id); },
                           isLiked: false,
                           price: 200
                       )),
             ),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-            HomeCustomTextIconBtn(onPressed: (){}, bgColor: grayColor(context).withOpacity(0.2), text: "More Products", icon: Iconsax.arrow_right_41),
+            HomeCustomTextIconBtn(onPressed: (){ Get.to( () => const FilterScreen() ); }, bgColor: grayColor(context).withOpacity(0.2), text: "More Products", icon: Iconsax.arrow_right_41),
             const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-            Container(
-              height: 60,
-              width: getWidth(context),
-              color: greenColor(context),
-              child: Center(child: Text("Ad banner", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: darkDarkLightLightColor(context)))),
-            ),
+            CustomUnity.banner(),
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3),
           ],
         ),

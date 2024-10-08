@@ -42,7 +42,7 @@ class CustomAdmob{
   }
 
   // - - - - - - - - - - - - - - - - - - APP OPEN - - - - - - - - - - - - - - - - - -  //
-  static void appOpen({ required void Function(AppOpenAd) onAdLoaded, required void Function(LoadAdError) onAdFailedToLoad }) async{
+  static void appOpen() async{
     //const androidAdUnitId = "ca-app-pub-3940256099942544/6300978111";
     //const iosAdUnitId = "ca-app-pub-3940256099942544/2934735716";
     //final String adUnitId = Platform.isAndroid ? androidAdUnitId : iosAdUnitId;
@@ -50,7 +50,18 @@ class CustomAdmob{
     await AppOpenAd.load(
         adUnitId: adUnitId,
         request: const AdRequest(),
-        adLoadCallback: AppOpenAdLoadCallback(onAdLoaded: onAdLoaded, onAdFailedToLoad: onAdFailedToLoad)
+        adLoadCallback: AppOpenAdLoadCallback(
+            onAdLoaded: (AppOpenAd ad){
+              try{
+                ad.fullScreenContentCallback = FullScreenContentCallback(
+                  onAdFailedToShowFullScreenContent: (ad, error){ ad.dispose(); },
+                  onAdDismissedFullScreenContent: (ad){ ad.dispose(); },
+                );
+                ad.show();
+              }catch(_){}
+            },
+            onAdFailedToLoad: (LoadAdError error){}
+        )
     );
   }
 

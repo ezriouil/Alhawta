@@ -113,7 +113,7 @@ class LoginScreen extends CustomState {
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
               LoginCustomTextIconBtn(
-                onPressed: controller.onChangeLanguage,
+                onPressed: (){ controller.onChangeLanguage(context: context); },
                 text: "CHANGE THE LANGUAGE",
                 bgColor: const Color(0xFF4285F4),
                 icon: CustomIcons.TRADUCTION,

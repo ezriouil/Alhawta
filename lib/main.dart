@@ -34,9 +34,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'home/home_controller.dart';
+
 
 void main() async {
 
@@ -65,18 +65,7 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   // - - - - - - - - - - - - - - - - - - SHOW ADMOB APP OPEN - - - - - - - - - - - - - - - - - -  //
-  CustomAdmob.appOpen(
-      onAdLoaded: (AppOpenAd ad){
-        try{
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdFailedToShowFullScreenContent: (ad, error){ ad.dispose(); },
-            onAdDismissedFullScreenContent: (ad){ ad.dispose(); },
-          );
-          ad.show();
-        }catch(_){}
-      },
-      onAdFailedToLoad: (LoadAdError error){}
-  );
+  /*  CustomAdmob.appOpen(); */
 
   runApp(const Alhawta());
 }
@@ -109,8 +98,7 @@ class Alhawta extends StatelessWidget {
             GetPage(name: '/profileScreen', page: () => const ProfileScreen()),
             GetPage(name: '/productScreen', page: () => const ProductScreen()),
           ],
-          //home: const IndexScreen()
-          home: const ProductScreen()
+          home: const LoginScreen()
       ),
     );
   }

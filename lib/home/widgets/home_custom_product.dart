@@ -1,5 +1,7 @@
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
+import 'package:avatar_glow/avatar_glow.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -7,7 +9,7 @@ import '../../utils/constants/custom_sizes.dart';
 
 class HomeCustomProduct extends CustomState {
   final String imgUri, title, description;
-  final Function(int id) onClick;
+  final Function(String id) onClick;
   final int price;
   final bool isLiked;
   final Color? bgColor;
@@ -27,7 +29,7 @@ class HomeCustomProduct extends CustomState {
   Widget execute(BuildContext context) {
 
     return Container(
-      width: 140,
+      width: 150,
       margin: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS / 8),
       decoration:BoxDecoration(
         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
@@ -43,7 +45,7 @@ class HomeCustomProduct extends CustomState {
         ),
       ),
       child: InkWell(
-        onTap: () => { onClick(3) },
+        onTap: () => { onClick("3") },
         child: Padding(
           padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
           // - - - - - - - - - - - - - - - - - - COLUMN - - - - - - - - - - - - - - - - - -  //
@@ -55,58 +57,64 @@ class HomeCustomProduct extends CustomState {
                 children: [
                   ClipRRect(
                       borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                      child: Image.network(
-                        imgUri,
+                      child: CachedNetworkImage(
+                        imageUrl: imgUri,
                         height: 120,
-                        width: 140,
+                        width: getWidth(context),
                         fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) =>
-                        loadingProgress == null ? child : Container(
-                            width: 140,
+                        progressIndicatorBuilder: (context, url, downloadProgress){
+                          return Container(
+                              width: 120,
+                              height: 140,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: grayColor(context)),
+                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 1, color: darkLightColor(context), backgroundColor: grayColor(context), value: downloadProgress.progress)),
+                                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                                  Text(downloadProgress.progress != null ? "${(downloadProgress.progress! * 100).toStringAsFixed(2)} %" : "Loading", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 12.0, fontWeight: FontWeight.w300))
+                                ],
+                              )
+                          );
+                        },
+                        errorWidget: (context, url, error) => Container(
                             height: 120,
-                            alignment: Alignment.center,
+                            width: 140,
                             decoration: BoxDecoration(
                                 border: Border.all(color: grayColor(context)),
-                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
-                            child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 4, color: greenColor(context)))
-                        ),
-                        errorBuilder: (context, url, error) => Container(
-                            width: 140,
-                            height: 120,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: grayColor(context)),
-                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
+                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)),
                             child: Icon(Iconsax.gallery_remove, size: 30.0, color: grayColor(context))),
-                      )),
-                  InkWell(
-                    onTap: (){ onClick(3); },
-                    overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
-                    child: Container(
-                        height: 20,
-                        width: 20,
-                        margin: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                        decoration: BoxDecoration(
-                            color: grayColor(context).withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)),
-                        child: Icon(isLiked ? Iconsax.heart5 : Iconsax.heart, size: 12, color: isLiked ? redColor(context) : darkLightColor(context))
-                    ),
+                      )
+                  ),
+                  Container(
+                      height: 24,
+                      width: 24,
+                      margin: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                      decoration: BoxDecoration(
+                          color: grayColor(context).withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)),
+                      child: Icon(isLiked ? Iconsax.heart5 : Iconsax.heart, size: 12, color: isLiked ? redColor(context) : darkLightColor(context))
                   )
                 ],
               ),
-              const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS/2),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS/ 2),
               Text(
                 title,
                 maxLines: 1,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", fontSize: 12.0, letterSpacing: 1),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", fontSize: 12.0, wordSpacing: 0.5),
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
                 description,
                 maxLines: 1,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10.0),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10.0, wordSpacing: 0.5),
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -117,7 +125,7 @@ class HomeCustomProduct extends CustomState {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Container(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.all(5.0),
                     decoration: BoxDecoration(
                         color: bgColor ?? greenColor(context),
                         borderRadius: const BorderRadius.only(

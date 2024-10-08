@@ -13,38 +13,44 @@ class IndexScreen extends CustomState {
   @override
   Widget execute(BuildContext context) {
     final IndexController controller = Get.find<IndexController>();
-    return Scaffold(
-      body: Obx(
-            () => Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Obx( () => controller.screens()[IndexController.currentIndex.value] ),
-                Positioned(
-                  child: Padding(
-                    padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
-                    child: BottomBarFloating(
-                      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 2),
-                      items: const [
-                        TabItem(icon: Iconsax.home, title: "Explore"),
-                        TabItem(icon: Iconsax.category, title: "Categories"),
-                        TabItem(icon: Iconsax.heart, title: "Favorite"),
-                        TabItem(icon: Iconsax.setting, title: "Settings"),
-                      ],
-                      backgroundColor: greenColor(context),
-                      color: darkDarkLightLightColor(context).withOpacity(0.5),
-                      colorSelected: darkDarkLightLightColor(context),
-                      titleStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10),
-                      iconSize: 20,
-                      animated: false,
-                      indexSelected: IndexController.currentIndex.value,
-                      onTap: controller.onUpdateCurrentIndex,
-                      paddingVertical: 12.0,
-                    ),
-                  ),
-                )
-              ],
-            ),
-      )
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop){
+        IndexController.currentIndex.value = 0;
+      },
+      child: Scaffold(
+          body: Obx(
+                () => Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    controller.screens()[IndexController.currentIndex.value],
+                    Positioned(
+                      child: Padding(
+                        padding: const EdgeInsets.all(CustomSizes.SPACE_DEFAULT),
+                        child: BottomBarFloating(
+                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS * 2),
+                          items: const [
+                            TabItem(icon: Iconsax.home, title: "Explore"),
+                            TabItem(icon: Iconsax.category, title: "Categories"),
+                            TabItem(icon: Iconsax.heart, title: "Favorite"),
+                            TabItem(icon: Iconsax.setting, title: "Settings"),
+                          ],
+                          backgroundColor: greenColor(context),
+                          color: darkDarkLightLightColor(context).withOpacity(0.5),
+                          colorSelected: darkDarkLightLightColor(context),
+                          titleStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 10),
+                          iconSize: 20,
+                          animated: false,
+                          indexSelected: IndexController.currentIndex.value,
+                          onTap: controller.onUpdateCurrentIndex,
+                          paddingVertical: 12.0,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+          )
+      ),
     );
   }
 }

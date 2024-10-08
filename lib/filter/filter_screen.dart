@@ -1,10 +1,12 @@
 import 'package:alhawta/filter/filter_controller.dart';
 import 'package:alhawta/filter/widgets/filter_custom_product.dart';
 import 'package:alhawta/filter/widgets/filter_custom_search.dart';
+import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class FilterScreen extends CustomState {
   const FilterScreen({super.key});
@@ -13,45 +15,72 @@ class FilterScreen extends CustomState {
   Widget execute(BuildContext context) {
     final FilterController controller = Get.find<FilterController>();
     return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-            child: FilterCustomSearch(
-              controller: controller.searchController,
-              hint: "Search",
-              onChange: controller.onSearch,
-              onFilter: controller.onFilter,
-              onBack: Get.back,
-            ),
+        appBar: AppBar(
+          title: Text("Back", style: Theme.of(context).textTheme.titleLarge),
+          centerTitle: false,
+          titleSpacing: 0.0,
+          leading: InkWell(
+              overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
+              onTap: (){ Get.back(); },
+              child: const Icon(Iconsax.arrow_left_3)
           ),
-          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: context.isLandscape ? 5 : 2,
-                    mainAxisExtent: 260,
-                    mainAxisSpacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
-                    crossAxisSpacing: 2.0
+          actions: [
+            InkWell(onTap: (){
+              controller.showOrHideSearch.value = !controller.showOrHideSearch.value;
+              controller.searchController.clear();
+            }, overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT), child: const Icon(Iconsax.search_normal,size: 20,)),
+            const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS)
+          ],
+        ),
+        body: Obx(
+            () => Column(
+              children: [
+                AnimatedContainer(
+                  curve: Curves.easeInOut,
+                  alignment: Alignment.topCenter,
+                  duration: const Duration(milliseconds: 800),
+                  height: controller.showOrHideSearch.isTrue ? 60 : 0,
+                  width: controller.showOrHideSearch.isTrue ? getWidth(context) : 0,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                    child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                        opacity: controller.showOrHideSearch.value ? 1 : 0,
+                        child: FilterCustomSearch(
+                          controller: controller.searchController,
+                          hint: "Search",
+                          onChange: controller.onSearch,
+                        )
+                    ),
+                  ),
                 ),
-                itemCount: 20,
-                shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) =>
-                      FilterCustomProduct(
-                        imgUri: 'https://yourdesignstore.s3.amazonaws.com/uploads/yds/productImages/thumb/17119587213301Main-Product-Image.jpg',
-                        title: "Jacket noir",
-                        description: "Une jacket avec bon état pouvez-vous contacter moi.",
-                        onClick: (id){},
-                        onLike: (id){  },
-                        price: 200,
-                        isLiked: true,
-                      )
-            ),
-          ),
-        ],
-      )
+                Expanded(
+                  child: GridView.builder(
+                      padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisExtent: 260,
+                          mainAxisSpacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
+                          crossAxisSpacing: 2.0
+                      ),
+                      itemCount: 20,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) =>
+                          FilterCustomProduct(
+                            imgUri: 'https://images.pexels.com/photos/414144/pexels-photo-414144.jpeg?auto=compress&cs=tinysrgb&w=1200',
+                            title: "Jacket noir",
+                            description: "Une jacket avec bon état pouvez-vous contacter moi.",
+                            onClick: (id){},
+                            onLike: (id){},
+                            price: 200,
+                            isLiked: true,
+                          )
+                  ),
+                ),
+              ],
+            )
+        )
     );
   }
 }

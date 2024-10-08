@@ -1,5 +1,5 @@
-import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -7,7 +7,7 @@ import '../../utils/constants/custom_sizes.dart';
 
 class FilterCustomProduct extends CustomState {
   final String imgUri, title, description;
-  final Function(int id) onClick, onLike;
+  final Function(String id) onClick, onLike;
   final int price;
   final Color? bgColor;
   final bool isLiked;
@@ -34,6 +34,7 @@ class FilterCustomProduct extends CustomState {
         gradient: LinearGradient(
           colors: [
             bgColor ?? greenColor(context),
+            bgColor ?? greenColor(context).withOpacity(0.5),
             darkDarkLightLightColor(context),
             darkDarkLightLightColor(context)
           ],
@@ -42,7 +43,7 @@ class FilterCustomProduct extends CustomState {
         ),
       ),
       child: InkWell(
-        onTap: () => { onClick(3) },
+        onTap: () => { onClick("3") },
         child: Padding(
           padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS /4),
           // - - - - - - - - - - - - - - - - - - COLUMN - - - - - - - - - - - - - - - - - -  //
@@ -54,41 +55,46 @@ class FilterCustomProduct extends CustomState {
                 children: [
                   ClipRRect(
                       borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                      child: Image.network(
-                        imgUri,
+                      child: CachedNetworkImage(
+                        imageUrl: imgUri,
                         height: 170,
                         width: getWidth(context),
                         fit: BoxFit.cover,
-                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) =>
-                        loadingProgress == null ? child : Container(
-                            width: getWidth(context),
-                            height: 170,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: grayColor(context)),
-                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
-                            child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 4, color: greenColor(context)))
-                        ),
-                        errorBuilder: (context, url, error) => Container(
+                        progressIndicatorBuilder: (context, url, downloadProgress){
+                          return Container(
+                              width: getWidth(context),
+                              height: 170,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: grayColor(context)),
+                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 1, color: greenColor(context), backgroundColor: darkDarkLightLightColor(context), value: downloadProgress.progress)),
+                                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                                  Text(downloadProgress.progress != null ? "${(downloadProgress.progress! * 100).toStringAsFixed(2)} %" : "Loading", style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkDarkLightLightColor(context), fontSize: 12.0, fontWeight: FontWeight.w300))
+                                ],
+                              )
+                          );
+                        },
+                        errorWidget: (context, url, error) => Container(
                             width: getWidth(context),
                             height: 170,
                             decoration: BoxDecoration(
                                 border: Border.all(color: grayColor(context)),
                                 borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
                             child: Icon(Iconsax.gallery_remove, size: 30.0, color: grayColor(context))),
-                      )),
-                  InkWell(
-                    onTap: (){ onLike(3); },
-                    overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
-                    child: Container(
-                      height: 28,
-                      width: 28,
-                      margin: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-                      decoration: BoxDecoration(
-                          color: grayColor(context).withOpacity(0.4),
-                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)),
-                      child: Icon(isLiked ? Iconsax.heart5 : Iconsax.heart, size: 16, color: isLiked ? redColor(context) : darkLightColor(context))
-                    ),
+                      )
+                  ),
+                  Container(
+                    height: 28,
+                    width: 28,
+                    margin: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                    decoration: BoxDecoration(
+                        color: grayColor(context).withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)),
+                    child: Icon(isLiked ? Iconsax.heart5 : Iconsax.heart, size: 16, color: isLiked ? redColor(context) : darkLightColor(context))
                   )
                 ],
               ),

@@ -17,7 +17,7 @@ class CustomCheckboxTheme {
       }),
       fillColor: MaterialStateProperty.resolveWith((states) {
         if (states.contains(MaterialState.selected)) {
-          return CustomColors.PRIMARY_DARK;
+          return CustomColors.GREEN_DARK;
         } else {
           return CustomColors.TRANSPARENT;
         }
@@ -28,14 +28,14 @@ class CustomCheckboxTheme {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
       checkColor: MaterialStateProperty.resolveWith((states) {
         if (states.contains(MaterialState.selected)) {
-          return CustomColors.WHITE;
-        } else {
           return CustomColors.BLACK;
+        } else {
+          return CustomColors.WHITE;
         }
       }),
       fillColor: MaterialStateProperty.resolveWith((states) {
         if (states.contains(MaterialState.selected)) {
-          return CustomColors.PRIMARY_LIGHT;
+          return CustomColors.GREEN_LIGHT;
         } else {
           return CustomColors.TRANSPARENT;
         }

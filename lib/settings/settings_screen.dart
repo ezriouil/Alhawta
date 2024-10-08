@@ -18,12 +18,13 @@ class SettingsScreen extends CustomState {
     final SettingsController controller = Get.find<SettingsController>();
     return Scaffold(
         appBar: AppBar(
-          title: Text("Back", style: Theme.of(context).textTheme.titleMedium),
+          title: Text("Back", style: Theme.of(context).textTheme.titleLarge),
           centerTitle: false,
+          titleSpacing: 0.0,
           leading: InkWell(
-            onTap: (){ IndexController.currentIndex.value  = 0; },
-            overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
-            child: Icon(Iconsax.arrow_left_24, color: darkLightColor(context)),
+              overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
+              onTap: (){ IndexController.currentIndex.value = 0; },
+              child: const Icon(Iconsax.arrow_left_3)
           ),
         ),
       body: Padding(
