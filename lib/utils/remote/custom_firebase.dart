@@ -1,11 +1,19 @@
 import 'dart:io';
 
+import 'package:alhawta/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class CustomFirebase {
   CustomFirebase._();
+
+  // - - - - - - - - - - - - - - - - - - SETUP - - - - - - - - - - - - - - - - -  //
+  static void setup({ required Function onCallBack }) async{
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    onCallBack.call();
+  }
 
   // - - - - - - - - - - - - - - - - - - REGISTER - - - - - - - - - - - - - - - - -  //
   Future<String?> register({ required FirebaseAuth firebaseAuth, required String email, required String password }) async {

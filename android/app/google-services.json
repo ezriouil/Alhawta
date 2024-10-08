@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "474346991602",
+    "project_id": "alhawta-74b34",
+    "storage_bucket": "alhawta-74b34.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:474346991602:android:1e11ce69a9b66b030cc56b",
+        "android_client_info": {
+          "package_name": "com.ezriouil.alhawta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaji2w_c73l8JTrjVIwZibw0LuApwet-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

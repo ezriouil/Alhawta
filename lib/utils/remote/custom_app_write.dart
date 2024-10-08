@@ -5,6 +5,17 @@ import 'package:appwrite/models.dart';
 class CustomAppWrite {
   CustomAppWrite._();
 
+  // - - - - - - - - - - - - - - - - - - SETUP - - - - - - - - - - - - - - - - -  //
+  static void setup({ required Function(Databases databases) onCallBack }) async{
+    Client client = Client();
+    client
+        .setEndpoint(CustomApi.appWriteEndPoint)
+        .setProject(CustomApi.appWriteProject)
+        .setSelfSigned(status: true);
+    final Databases databases = Databases(client);
+    onCallBack.call(databases);
+  }
+
   // - - - - - - - - - - - - - - - - - - INSERT - - - - - - - - - - - - - - - - -  //
   static Future<Map<String, dynamic>> insert({
         required Databases databases,

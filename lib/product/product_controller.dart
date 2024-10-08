@@ -1,8 +1,5 @@
 import 'package:alhawta/product/widgets/product_custom_elevated_btn.dart';
 import 'package:alhawta/utils/ads/custom_admob.dart';
-import 'package:alhawta/utils/constants/custom_api.dart';
-import 'package:alhawta/utils/remote/custom_app_write.dart';
-import 'package:appwrite/appwrite.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_images.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
@@ -40,53 +37,6 @@ class ProductController extends GetxController {
   init() async{
     admobSetupBanner();
     admobSetupNative();
-
-
-    Client client = Client();
-    client
-        .setEndpoint(CustomApi.appWriteEndPoint)
-        .setProject(CustomApi.appWriteProject)
-        .setSelfSigned(status: true);
-
-    Databases database = Databases(client);
-
-    // await database.createDocument(
-    //     databaseId: "67043c8b003446046f0f",
-    //     collectionId: "67043cbd001fc10677d9",
-    //     documentId: "uid1",
-    //     data: {
-    //       'uid': "uid1",
-    //       'fullName': "Mohamed ezriouil",
-    //       'email': "mohamedezriouil@gmail.com",
-    //       'avatar': "default_IMG",
-    //       'createdAt': "Mon 7 Oct 21:07"
-    //     });
-
-    // final response = await database.listDocuments(
-    //   databaseId: "67043c8b003446046f0f",
-    //   collectionId: "67043cbd001fc10677d9"
-    // );
-    // print("++++++++");
-    // print(response.documents[0].data['fullName']);
-    // print(response.documents[0].data['email']);
-    // print("++++++++");
-
-    // final response = await database.updateDocument(
-    //     databaseId: "67043c8b003446046f0f",
-    //     collectionId: "67043cbd001fc10677d9",
-    //     documentId: "uid1",
-    //     data: {'avatar': "No avatar"}
-    // );
-    // print("++++++++");
-    // print(response.data["avatar"]);
-    //  print("++++++++");
-
-    // final response =  await database.deleteDocument(
-    //       databaseId: "67043c8b003446046f0f",
-    //       collectionId: "67043cbd001fc10677d9",
-    //       documentId: "uid1",
-    // );
-
   }
   
 

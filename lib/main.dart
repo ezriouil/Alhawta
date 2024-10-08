@@ -21,10 +21,15 @@ import 'package:alhawta/settings/settings_screen.dart';
 import 'package:alhawta/utils/ads/custom_admob.dart';
 import 'package:alhawta/utils/ads/custom_facebook.dart';
 import 'package:alhawta/utils/ads/custom_unity.dart';
+import 'package:alhawta/utils/remote/custom_app_write.dart';
+import 'package:alhawta/utils/remote/custom_firebase.dart';
 import 'package:alhawta/utils/theme/theme_app.dart';
 import 'package:alhawta/wishlist/wishList_controller.dart';
 import 'package:alhawta/wishlist/wishList_screen.dart';
+import 'package:appwrite/appwrite.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,6 +47,19 @@ void main() async {
   CustomAdmob.setup();
   CustomUnity.setup();
   CustomFacebook.setup();
+
+  // - - - - - - - - - - - - - - - - - - INITIALISATION DATABASES - - - - - - - - - - - - - - - - - -  //
+  CustomFirebase.setup(
+    onCallBack: (){
+      Get.put(FirebaseAuth.instance);
+      Get.put(FirebaseStorage.instance);
+    }
+  );
+  CustomAppWrite.setup(
+    onCallBack: (Databases databases){
+      Get.put(databases);
+    }
+  );
 
   // - - - - - - - - - - - - - - - - - - HIDE THE TOP STATUS BAR AND SYSTEM BOTTOM BAR - - - - - - - - - - - - - - - - - -  //
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
