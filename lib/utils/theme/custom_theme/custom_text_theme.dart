@@ -14,7 +14,7 @@ class CustomTextTheme{
     titleMedium: const TextStyle().copyWith(fontSize: 16.0, fontWeight: FontWeight.w500, color: CustomColors.BLACK, fontFamily: "Cal"),
     titleLarge: const TextStyle().copyWith(fontSize: 16.0, fontWeight: FontWeight.bold, color: CustomColors.BLACK, fontFamily: "Cal"),
 
-    bodySmall: const TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.w500, color: CustomColors.BLACK.withOpacity(0.5), fontFamily: "Cal"),
+    bodySmall: const TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.w500, color: CustomColors.BLACK.withOpacity(0.4), fontFamily: "Cal"),
     bodyMedium: const TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.w500, color: CustomColors.BLACK, fontFamily: "Cal"),
     bodyLarge: const TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.bold, color: CustomColors.BLACK, fontFamily: "Cal"),
   );
@@ -29,7 +29,7 @@ class CustomTextTheme{
     titleMedium: const TextStyle().copyWith(fontSize: 16.0, fontWeight: FontWeight.w500, color: CustomColors.WHITE, fontFamily: "Cal"),
     titleLarge: const TextStyle().copyWith(fontSize: 16.0, fontWeight: FontWeight.bold, color: CustomColors.WHITE, fontFamily: "Cal"),
 
-    bodySmall: const TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.w500, color: CustomColors.WHITE.withOpacity(0.5), fontFamily: "Cal"),
+    bodySmall: const TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.w500, color: CustomColors.GRAY_DARK, fontFamily: "Cal"),
     bodyMedium: const TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.bold, color: CustomColors.WHITE, fontFamily: "Cal"),
     bodyLarge: const TextStyle().copyWith(fontSize: 14.0, fontWeight: FontWeight.w500, color: CustomColors.WHITE, fontFamily: "Cal"),
   );

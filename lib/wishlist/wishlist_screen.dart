@@ -1,13 +1,14 @@
 import 'package:alhawta/index/index_controller.dart';
+import 'package:alhawta/product/product_screen.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
-import 'package:alhawta/wishlist/widgets/wishList_custom_product.dart';
+import 'package:alhawta/wishlist/widgets/wishlist_custom_product.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import 'wishList_controller.dart';
+import 'wishlist_controller.dart';
 
 class WishListScreen extends CustomState {
   const WishListScreen({super.key});
@@ -46,12 +47,14 @@ class WishListScreen extends CustomState {
           ),
           itemBuilder: (BuildContext context, int index) =>
               WishListCustomProduct(
-                src: 'https://yourdesignstore.s3.amazonaws.com/uploads/yds/productImages/thumb/17119587213301Main-Product-Image.jpg',
-                title: "Jacket noir",
-                description: "Jacket noir black size 23 more data should you check out our website.",
-                onView: (){},
-                onDelete: (){ controller.onDeleteProduct(context: context); },
-              )),
+                  imgUri: 'https://i.ytimg.com/vi/YsMObMEAE_Q/hqdefault.jpg?sqp=-oaymwE9CNACELwBSFryq4qpAy8IARUAAAAAGAElAADIQj0AgKJDeAHwAQH4Af4JgALQBYoCDAgAEAEYciBMKDQwDw==&rs=AOn4CLDxhoRTxvhGQTp3uKFUNfqCHMQyYw',
+                  id: 'randomId',
+                  title: "Jacket noir",
+                  description: "Jacket noir black size 23 more data should you check out our website.",
+                  onView: (id){ Get.to( () => const ProductScreen(), arguments: id ); },
+                  onDelete: (){ controller.onDeleteProduct(context: context); }
+              )
+      ),
     );
   }
 }

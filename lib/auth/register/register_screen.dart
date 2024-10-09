@@ -165,7 +165,7 @@ class RegisterScreen extends CustomState {
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
               RegisterCustomTextIconBtn(
-                onPressed: controller.onChangeLanguage,
+                onPressed: (){ controller.onChangeLanguage(context: context); },
                 text: "CHANGE THE LANGUAGE",
                 bgColor: const Color(0xFF4285F4),
                 icon: CustomIcons.TRADUCTION,

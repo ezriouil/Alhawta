@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
 
+  // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
   late final GlobalKey<FormState> formState;
@@ -27,12 +27,16 @@ class LoginController extends GetxController {
   // - - - - - - - - - - - - - - - - - - LOGIN WITH  EMAIL AND PASSWORD - - - - - - - - - - - - - - - - - -  //
   Future<void> onLogin() async {
     try { Get.off( () => const IndexScreen() ); }
-    catch (_) {}
+    catch (_) {
+      // CHECK CONNECTION INTERNET
+    }
   }
 
   // - - - - - - - - - - - - - - - - - - LOGIN WITH GOOGLE - - - - - - - - - - - - - - - - - -  //
   void onLoginWithGoogle() async {
-    try {}
+    try {
+      // CHECK CONNECTION INTERNET
+    }
     catch (_) {}
   }
 
@@ -45,11 +49,8 @@ class LoginController extends GetxController {
 
     await showDialog(
         context: context,
-
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: SizedBox(
-              child: Column(
+        builder: (BuildContext context) => AlertDialog(
+            content: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -61,44 +62,33 @@ class LoginController extends GetxController {
                     children: [
                       Column(
                           children: [
-
-                            // - - - - - - - - - - - - - - - - - - CHECKBOX - - - - - - - - - - - - - - - - - -  //
                             Checkbox(
                               visualDensity: const VisualDensity(horizontal: -4, vertical: -2),
                               value: false,
                               onChanged: (value) async{},
                             ),
-
                             const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                            // - - - - - - - - - - - - - - - - - - IMAGE - - - - - - - - - - - - - - - - - -  //
-                            ClipRRect(borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2), child: Image.asset(CustomImages.FLAG_MOROCCO, height: 30, width: 40, fit: BoxFit.cover)),
-
+                            ClipRRect(borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2), child: Image.asset(CustomImages.FLAG_MOROCCO, height: 30, width: 40, fit: BoxFit.cover))
                           ]
                       ),
                       Column(
                           children: [
-
-                            // - - - - - - - - - - - - - - - - - - CHECKBOX - - - - - - - - - - - - - - - - - -  //
                             Checkbox(
                               visualDensity: const VisualDensity(horizontal: -4, vertical: -2),
                               value: true,
                               onChanged: (value) async{},
                             ),
-
                             const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-
-                            // - - - - - - - - - - - - - - - - - - IMAGE - - - - - - - - - - - - - - - - - -  //
-                            ClipRRect(borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2), child: Image.asset(CustomImages.FLAG_FRANCE, height: 30, width: 40, fit: BoxFit.cover)),
-
+                            ClipRRect(borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2), child: Image.asset(CustomImages.FLAG_FRANCE, height: 30, width: 40, fit: BoxFit.cover))
                           ]
                       ),
                     ],
                   )
-              ])
-            )
-          );
-        });
+                ])
+        )
+        );
     if(langSelected == "") return;
+    // CALL LOCAL STORAGE
   }
 
 }

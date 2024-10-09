@@ -1,6 +1,4 @@
-import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';

@@ -4,6 +4,7 @@ import 'package:alhawta/settings/widgets/settings_custom_tile.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -46,32 +47,35 @@ class SettingsScreen extends CustomState {
                 child: ListTile(
                   leading: ClipRRect(
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
-                        child: Image.network(
-                          "https://avatars.githubusercontent.com/u/130238246?v=4",
-                          width: 50,
+                        child: CachedNetworkImage(
+                          imageUrl:  "https://i.ytimg.com/vi/g8rZD5v4MtU/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLCkWIFsOz6A_ZatiYFePH6OWDx4Rg",
                           height: 50,
+                          width: 50,
                           fit: BoxFit.cover,
-                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) =>
-                          loadingProgress == null ? child : Container(
-                            height: 50,
+                          progressIndicatorBuilder: (context, url, downloadProgress){
+                            return Container(
+                                height: 50,
+                                width: 50,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: grayColor(context)),
+                                    borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)
+                                ),
+                                child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 1, color: darkLightColor(context), backgroundColor: grayColor(context), value: downloadProgress.progress))
+                            );
+                          },
+                          errorWidget: (context, url, error) => Container(
+                              height: 50,
                               width: 50,
-                              alignment: Alignment.center,
                               decoration: BoxDecoration(
                                   border: Border.all(color: grayColor(context)),
                                   borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)),
-                              child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 3, color: greenColor(context)))),
-                          errorBuilder: (context, url, error) => Container(
-                            height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: grayColor(context)),
-                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)),
-                              child: Icon(Iconsax.gallery_remove, size: 22.0, color: grayColor(context))),
+                              child: Icon(Iconsax.gallery_remove, size: 20.0, color: grayColor(context))),
                         )
                     ),
                   contentPadding: EdgeInsets.zero,
                   title: Text("Mohamed Ezriouil", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold")),
-                  subtitle: Text("Mohamedezriouil@gmail.com", overflow: TextOverflow.ellipsis, maxLines: 1, style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12)),
+                  subtitle: Text("Mohamedezriouil@gmail.com", overflow: TextOverflow.ellipsis, maxLines: 1, style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11)),
                   trailing: Icon(Iconsax.more_2, color: grayColor(context)),
                   ),
               ),

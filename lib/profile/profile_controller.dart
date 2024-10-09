@@ -1,8 +1,10 @@
 import 'package:alhawta/profile/widgets/profile_custom_elevated_btn.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ProfileController extends GetxController {
 
@@ -37,8 +39,32 @@ class ProfileController extends GetxController {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+
             // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+
+            // - - - - - - - - - - - - - - - - - - ICON - - - - - - - - - - - - - - - - - -  //
+            Container(
+              width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+              height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
+                color: CustomColors.GOLD.withOpacity(0.2),
+              ),
+              child: AvatarGlow(
+                glowCount: 3,
+                glowColor: CustomColors.GOLD,
+                glowRadiusFactor: 0.2,
+                child: const Icon(
+                  Iconsax.information,
+                  size: CustomSizes.SPACE_BETWEEN_SECTIONS,
+                  color: CustomColors.GOLD
+                ),
+              ),
+            ),
+
+            // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
 
             // - - - - - - - - - - - - - - - - - -  TITLE - - - - - - - - - - - - - - - - - -  //
             Text(
@@ -47,16 +73,17 @@ class ProfileController extends GetxController {
             ),
 
             // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
 
             // - - - - - - - - - - - - - - - - - -  SUB TITLE 1 - - - - - - - - - - - - - - - - - -  //
             Text(
-                "By clicking on Update button you will update your info.",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12)
+              "By clicking on Update button you will update your info.",
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
+              textAlign: TextAlign.center,
             ),
 
             // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
             Row(
               children: [
                 Expanded(
@@ -74,13 +101,14 @@ class ProfileController extends GetxController {
                       onEditMode();
                       Get.back();
                       },
-                    text: "Update",
-                    bgColor: CustomColors.GREEN_DARK,
-                    textColor: CustomColors.WHITE,
+                    text: "Validate",
+                    bgColor: CustomColors.GOLD,
+                    textColor: CustomColors.BLACK,
                   ),
                 ),
               ],
             ),
+            const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
           ],
         ),
       ),
@@ -99,8 +127,32 @@ class ProfileController extends GetxController {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+
                 // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+
+                // - - - - - - - - - - - - - - - - - - ICON - - - - - - - - - - - - - - - - - -  //
+                Container(
+                  width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+                  height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
+                    color: CustomColors.GOLD.withOpacity(0.2),
+                  ),
+                  child: AvatarGlow(
+                    glowCount: 3,
+                    glowColor: CustomColors.GOLD,
+                    glowRadiusFactor: 0.2,
+                    child: const Icon(
+                        Iconsax.image,
+                        size: CustomSizes.SPACE_BETWEEN_SECTIONS,
+                        color: CustomColors.GOLD
+                    ),
+                  ),
+                ),
+
+                // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
+                const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
 
                 // - - - - - - - - - - - - - - - - - -  TITLE - - - - - - - - - - - - - - - - - -  //
                 Text(
@@ -109,16 +161,17 @@ class ProfileController extends GetxController {
                 ),
 
                 // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
 
                 // - - - - - - - - - - - - - - - - - -  SUB TITLE 1 - - - - - - - - - - - - - - - - - -  //
                 Text(
-                    "By clicking on Gallery button you will going into your photos to chose.",
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12)
+                  "By clicking on Gallery button you will going into your photos to chose.",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
+                  textAlign: TextAlign.center,
                 ),
 
                 // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-                const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
                 Row(
                   children: [
                     Expanded(
@@ -132,15 +185,14 @@ class ProfileController extends GetxController {
                     const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                     Expanded(
                       child: ProfileCustomElevatedBtn(
-                        onPressed: (){
-                          Get.back();
-                        },
+                        onPressed: (){ Get.back(); },
                         text: "Gallery",
                         bgColor: CustomColors.GOLD,
                       ),
                     ),
                   ],
                 ),
+                const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
               ],
             ),
           ),

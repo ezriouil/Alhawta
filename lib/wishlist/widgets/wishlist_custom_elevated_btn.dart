@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 class WishListCustomElevatedBtn extends CustomState{
   final GestureTapCallback onPressed;
   final Color bgColor;
+  final Color? textColor;
   final String text;
 
 
-   const WishListCustomElevatedBtn({super.key, required this.onPressed, required this.bgColor, required this.text});
+   const WishListCustomElevatedBtn({super.key, required this.onPressed, required this.bgColor, this.textColor, required this.text});
 
   @override
   Widget execute(BuildContext context) {
@@ -27,7 +28,7 @@ class WishListCustomElevatedBtn extends CustomState{
         onPressed: onPressed,
         child: Text(
           text,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkDarkLightLightColor(context)),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: textColor ?? darkDarkLightLightColor(context)),
         ),
       ),
     );

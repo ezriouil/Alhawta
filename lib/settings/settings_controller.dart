@@ -1,8 +1,10 @@
 import 'package:alhawta/settings/widgets/settings_custom_elevated_btn.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class SettingsController extends GetxController {
 
@@ -44,8 +46,32 @@ class SettingsController extends GetxController {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+
             // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+
+            // - - - - - - - - - - - - - - - - - - ICON - - - - - - - - - - - - - - - - - -  //
+            Container(
+              width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+              height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
+                color: context.isDarkMode ? CustomColors.RED_LIGHT.withOpacity(0.2) : CustomColors.RED_DARK.withOpacity(0.2),
+              ),
+              child: AvatarGlow(
+                glowCount: 3,
+                glowColor: context.isDarkMode ? CustomColors.RED_LIGHT.withOpacity(0.1) : CustomColors.RED_DARK.withOpacity(0.1),
+                glowRadiusFactor: 0.2,
+                child: Icon(
+                    Iconsax.profile_delete,
+                    size: CustomSizes.SPACE_BETWEEN_SECTIONS,
+                    color: context.isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK
+                ),
+              ),
+            ),
+
+            // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
 
             // - - - - - - - - - - - - - - - - - -  TITLE - - - - - - - - - - - - - - - - - -  //
             Text(
@@ -54,16 +80,17 @@ class SettingsController extends GetxController {
             ),
 
             // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
 
             // - - - - - - - - - - - - - - - - - -  SUB TITLE 1 - - - - - - - - - - - - - - - - - -  //
             Text(
                 "By clicking on Delete button you will remove your account completely.",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12)
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
+              textAlign: TextAlign.center,
             ),
 
             // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
             Row(
               children: [
                 Expanded(
@@ -79,12 +106,12 @@ class SettingsController extends GetxController {
                   child: SettingsCustomElevatedBtn(
                     onPressed: (){ Get.back(); },
                     text: "Delete",
-                    bgColor: CustomColors.RED_DARK,
-                    textColor: CustomColors.WHITE,
+                    bgColor: context. isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK,
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
           ],
         ),
       ),
@@ -103,26 +130,52 @@ class SettingsController extends GetxController {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+
             // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+
+            // - - - - - - - - - - - - - - - - - - ICON - - - - - - - - - - - - - - - - - -  //
+            Container(
+              width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+              height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
+                color: context.isDarkMode ? CustomColors.RED_LIGHT.withOpacity(0.2) : CustomColors.RED_DARK.withOpacity(0.2),
+              ),
+              child: AvatarGlow(
+                glowCount: 3,
+                glowColor: context.isDarkMode ? CustomColors.RED_LIGHT.withOpacity(0.1) : CustomColors.RED_DARK.withOpacity(0.1),
+                glowRadiusFactor: 0.2,
+                child: Icon(
+                    Iconsax.close_circle,
+                    size: CustomSizes.SPACE_BETWEEN_SECTIONS,
+                    color: context.isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK
+                ),
+              ),
+            ),
+
+            // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
+            const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
 
             // - - - - - - - - - - - - - - - - - -  TITLE - - - - - - - - - - - - - - - - - -  //
             Text(
               "De Connected",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(letterSpacing: 0.6, fontFamily: "Pop_Semi_Bold"),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(letterSpacing: 0.6, fontFamily: "Pop_Semi_Bold")
             ),
 
             // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
 
             // - - - - - - - - - - - - - - - - - -  SUB TITLE 1 - - - - - - - - - - - - - - - - - -  //
             Text(
                 "By clicking on Delete button you will de connected automatically.",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12)
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
+              textAlign: TextAlign.center,
             ),
 
             // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+
             Row(
               children: [
                 Expanded(
@@ -138,17 +191,16 @@ class SettingsController extends GetxController {
                   child: SettingsCustomElevatedBtn(
                     onPressed: (){ Get.back(); },
                     text: "De connected",
-                    bgColor: CustomColors.RED_DARK,
-                    textColor: CustomColors.WHITE,
+                    bgColor: context.isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK,
                   ),
                 ),
               ],
             ),
+
+            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
           ],
         ),
       ),
-    )
-    );
+    ));
   }
-
 }

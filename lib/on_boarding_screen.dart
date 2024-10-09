@@ -32,7 +32,7 @@ class OnBoardingScreen extends CustomState {
 
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
-            Text("Easily find your type of clothes from best brands\nenjoy, Have good shopping", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12), textAlign: TextAlign.center),
+            Text("Easily find your type of clothes from best brands\nenjoy, Have good shopping", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontStyle: FontStyle.italic), textAlign: TextAlign.center),
 
             const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
 

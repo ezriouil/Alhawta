@@ -24,15 +24,14 @@ import 'package:alhawta/utils/ads/custom_unity.dart';
 import 'package:alhawta/utils/remote/custom_app_write.dart';
 import 'package:alhawta/utils/remote/custom_firebase.dart';
 import 'package:alhawta/utils/theme/theme_app.dart';
-import 'package:alhawta/wishlist/wishList_controller.dart';
-import 'package:alhawta/wishlist/wishList_screen.dart';
+import 'package:alhawta/wishlist/wishlist_controller.dart';
+import 'package:alhawta/wishlist/wishlist_screen.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'home/home_controller.dart';
@@ -74,32 +73,27 @@ class Alhawta extends StatelessWidget {
   const Alhawta ({super.key});
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: Size(context.width, context.height),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      child: GetMaterialApp(
-          themeMode: ThemeMode.system,
-          theme: ThemeApp.lightTheme,
-          darkTheme: ThemeApp.darkTheme,
-          debugShowCheckedModeBanner: false,
-          initialBinding: RootBinding(),
-          getPages: [
-            GetPage(name: '/on_boarding', page: () => const OnBoardingScreen()),
-            GetPage(name: '/login', page: () => const LoginScreen()),
-            GetPage(name: '/register', page: () => const RegisterScreen()),
-            GetPage(name: '/forgot_password', page: () => const ForgotPasswordScreen()),
-            GetPage(name: '/index', page: () => const IndexScreen()),
-            GetPage(name: '/home', page: () => const HomeScreen()),
-            GetPage(name: '/categories', page: () => const CategoriesScreen()),
-            GetPage(name: '/search', page: () => const FilterScreen()),
-            GetPage(name: '/wishList', page: () => const WishListScreen()),
-            GetPage(name: '/settingsScreen', page: () => const SettingsScreen()),
-            GetPage(name: '/profileScreen', page: () => const ProfileScreen()),
-            GetPage(name: '/productScreen', page: () => const ProductScreen()),
-          ],
-          home: const LoginScreen()
-      ),
+    return GetMaterialApp(
+        themeMode: ThemeMode.system,
+        theme: ThemeApp.lightTheme,
+        darkTheme: ThemeApp.darkTheme,
+        debugShowCheckedModeBanner: false,
+        initialBinding: RootBinding(),
+        getPages: [
+          GetPage(name: '/on_boarding', page: () => const OnBoardingScreen()),
+          GetPage(name: '/login', page: () => const LoginScreen()),
+          GetPage(name: '/register', page: () => const RegisterScreen()),
+          GetPage(name: '/forgot_password', page: () => const ForgotPasswordScreen()),
+          GetPage(name: '/index', page: () => const IndexScreen()),
+          GetPage(name: '/home', page: () => const HomeScreen()),
+          GetPage(name: '/categories', page: () => const CategoriesScreen()),
+          GetPage(name: '/search', page: () => const FilterScreen()),
+          GetPage(name: '/wishList', page: () => const WishListScreen()),
+          GetPage(name: '/settingsScreen', page: () => const SettingsScreen()),
+          GetPage(name: '/profileScreen', page: () => const ProfileScreen()),
+          GetPage(name: '/productScreen', page: () => const ProductScreen()),
+        ],
+        home: const IndexScreen()
     );
   }
 }

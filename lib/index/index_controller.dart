@@ -1,7 +1,7 @@
 import 'package:alhawta/categories/categories_screen.dart';
 import 'package:alhawta/home/home_screen.dart';
 import 'package:alhawta/settings/settings_screen.dart';
-import 'package:alhawta/wishlist/wishList_screen.dart';
+import 'package:alhawta/wishlist/wishlist_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 

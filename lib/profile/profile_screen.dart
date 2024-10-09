@@ -5,6 +5,7 @@ import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/extensions/validator.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -19,12 +20,13 @@ class ProfileScreen extends CustomState {
     final ProfileController controller = Get.find<ProfileController>();
     return Scaffold(
         appBar: AppBar(
-          title: Text("Back", style: Theme.of(context).textTheme.titleMedium),
+          title: Text("Back", style: Theme.of(context).textTheme.titleLarge),
           centerTitle: false,
+          titleSpacing: 0.0,
           leading: InkWell(
-            onTap: () { Get.back(); },
-            overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
-            child: Icon(Iconsax.arrow_left_24, color: darkLightColor(context)),
+              overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
+              onTap: Get.back,
+              child: const Icon(Iconsax.arrow_left_3)
           ),
           actions: [
             InkWell(
@@ -55,13 +57,38 @@ class ProfileScreen extends CustomState {
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 3),
                         child: Stack(
                           children: [
-                            Image.network(
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLvs4dAjkDnXJhuFPC0-Ygamn7X6nSToHl2Q&s",
-                                height: getHeight(context),
-                                width: getWidth(context),
-                                fit: BoxFit.cover,
-                                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) => loadingProgress == null ? child : Center(child: CircularProgressIndicator(color: greenColor(context))),
-                                errorBuilder: (context, url, error) => Center(child: Icon(Iconsax.gallery_remove, size: 30.0, color: grayColor(context)))),
+                            CachedNetworkImage(
+                              imageUrl:  "https://i.ytimg.com/vi/PbZl6LGcCZQ/hqdefault.jpg?sqp=-oaymwE9CNACELwBSFryq4qpAy8IARUAAAAAGAElAADIQj0AgKJDeAHwAQH4Af4JgALQBYoCDAgAEAEYZSBlKGUwDw==&rs=AOn4CLBno3KYDaH-Zn1TWV0FotWdkOp-Uw",
+                              height: getHeight(context),
+                              width: getWidth(context),
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder: (context, url, downloadProgress){
+                                return Container(
+                                    width: getWidth(context),
+                                    height: getHeight(context),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: grayColor(context)),
+                                        borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 1, color: darkLightColor(context), backgroundColor: grayColor(context), value: downloadProgress.progress)),
+                                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                                        Text(downloadProgress.progress != null ? "${(downloadProgress.progress! * 100).toStringAsFixed(2)} %" : "Loading", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 12.0, fontWeight: FontWeight.w300))
+                                      ],
+                                    )
+                                );
+                              },
+                              errorWidget: (context, url, error) => Container(
+                                  height: getHeight(context),
+                                  width: getWidth(context),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: grayColor(context)),
+                                      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
+                                  child: Icon(Iconsax.gallery_remove, size: 30.0, color: grayColor(context))),
+                            ),
                             if(controller.editMode.value) InkWell(
                               overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
                               onTap: (){ controller.onUpdateImageProfile(context); },

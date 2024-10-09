@@ -75,7 +75,7 @@ class LoginScreen extends CustomState {
                 ],
               ),
 
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+              const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
 
               LoginCustomElevatedBtn(
                 onPressed: controller.onLogin,
