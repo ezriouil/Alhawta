@@ -1,4 +1,5 @@
 import 'package:alhawta/filter/filter_controller.dart';
+import 'package:alhawta/filter/widgets/filter_custom_empty.dart';
 import 'package:alhawta/filter/widgets/filter_custom_product.dart';
 import 'package:alhawta/filter/widgets/filter_custom_search.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
@@ -33,30 +34,32 @@ class FilterScreen extends CustomState {
           ],
         ),
         body: Obx(
-            () => Column(
-              children: [
-                AnimatedContainer(
-                  curve: Curves.easeInOut,
-                  alignment: Alignment.topCenter,
-                  duration: const Duration(milliseconds: 800),
-                  height: controller.showOrHideSearch.isTrue ? 60 : 0,
-                  width: controller.showOrHideSearch.isTrue ? getWidth(context) : 0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                    child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                        opacity: controller.showOrHideSearch.value ? 1 : 0,
-                        child: FilterCustomSearch(
-                          controller: controller.searchController,
-                          hint: "Search",
-                          onChange: controller.onSearch,
-                        )
+            () => SingleChildScrollView(
+              child: Column(
+                children: [
+                  AnimatedContainer(
+                    curve: Curves.easeInOut,
+                    alignment: Alignment.topCenter,
+                    duration: const Duration(milliseconds: 800),
+                    height: controller.showOrHideSearch.isTrue ? 60 : 0,
+                    width: controller.showOrHideSearch.isTrue ? getWidth(context) : 0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                      child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                          opacity: controller.showOrHideSearch.value ? 1 : 0,
+                          child: FilterCustomSearch(
+                            controller: controller.searchController,
+                            hint: "Search",
+                            onChange: controller.onSearch,
+                          )
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: GridView.builder(
+                  controller.products.isEmpty
+                      ? FilterCustomEmpty(title: "Result Not Found", description: "Whoops ... ${controller.searchController.text} product not exist !.")
+                      : GridView.builder(
                       padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -64,8 +67,9 @@ class FilterScreen extends CustomState {
                           mainAxisSpacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
                           crossAxisSpacing: 2.0
                       ),
-                      itemCount: 20,
+                      itemCount: controller.products.length,
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) =>
                           FilterCustomProduct(
                             imgUri: 'https://images.pexels.com/photos/414144/pexels-photo-414144.jpeg?auto=compress&cs=tinysrgb&w=1200',
@@ -77,8 +81,8 @@ class FilterScreen extends CustomState {
                             isLiked: true,
                           )
                   ),
-                ),
-              ],
+                ],
+              ),
             )
         )
     );

@@ -4,6 +4,7 @@ import 'package:alhawta/settings/widgets/settings_custom_tile.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,22 @@ class SettingsScreen extends CustomState {
               onTap: (){ IndexController.currentIndex.value = 0; },
               child: const Icon(Iconsax.arrow_left_3)
           ),
+          actions: [
+            InkWell(
+                onTap: (){ controller.onSubscription(context); },
+                overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
+                child: AvatarGlow(
+                  glowColor: greenColor(context),
+                  glowCount: 3,
+                  glowRadiusFactor: 0.5,
+                  child: Icon(
+                    Icons.diamond,
+                    color: darkLightColor(context),
+                    size: 22,
+                  ),
+                )),
+            const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS)
+          ],
         ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -37,7 +54,7 @@ class SettingsScreen extends CustomState {
 
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
-              Text("Profile", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold")),
+              Text("Profile", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold", letterSpacing: 0)),
 
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
 
@@ -49,13 +66,13 @@ class SettingsScreen extends CustomState {
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
                         child: CachedNetworkImage(
                           imageUrl:  "https://i.ytimg.com/vi/g8rZD5v4MtU/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLCkWIFsOz6A_ZatiYFePH6OWDx4Rg",
-                          height: 50,
-                          width: 50,
+                          height: 55,
+                          width: 55,
                           fit: BoxFit.cover,
                           progressIndicatorBuilder: (context, url, downloadProgress){
                             return Container(
-                                height: 50,
-                                width: 50,
+                                height: 55,
+                                width: 55,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     border: Border.all(color: grayColor(context)),
@@ -65,8 +82,8 @@ class SettingsScreen extends CustomState {
                             );
                           },
                           errorWidget: (context, url, error) => Container(
-                              height: 50,
-                              width: 50,
+                              height: 55,
+                              width: 55,
                               decoration: BoxDecoration(
                                   border: Border.all(color: grayColor(context)),
                                   borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS)),
@@ -82,7 +99,7 @@ class SettingsScreen extends CustomState {
 
               const SizedBox(height: CustomSizes.SPACE_DEFAULT),
 
-              Text("Store", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold")),
+              Text("Store", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold", letterSpacing: 0)),
 
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
@@ -106,7 +123,7 @@ class SettingsScreen extends CustomState {
 
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
 
-                Text("Display", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold")),
+                Text("Display", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold", letterSpacing: 0)),
 
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
 
@@ -158,7 +175,7 @@ class SettingsScreen extends CustomState {
 
               const SizedBox(height: CustomSizes.SPACE_DEFAULT),
 
-              Text("Others", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold")),
+              Text("Others", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold", letterSpacing: 0)),
 
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
@@ -214,7 +231,7 @@ class SettingsScreen extends CustomState {
 
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
 
-              Center(child: Text("Version 1.0.0", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12))),
+              Center(child: Text("Version 1.0.0", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, letterSpacing: 0))),
 
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS * 3)
             ],

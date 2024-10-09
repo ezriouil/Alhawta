@@ -6,6 +6,7 @@ class FilterController extends GetxController {
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
   late TextEditingController searchController;
   late RxBool showOrHideSearch;
+  late RxList<String> products;
 
   // - - - - - - - - - - - - - - - - - - INIT STATES - - - - - - - - - - - - - - - - - -  //
   @override
@@ -13,11 +14,10 @@ class FilterController extends GetxController {
     super.onInit();
     searchController = TextEditingController();
     showOrHideSearch = false.obs;
+    products = RxList(["a", "b", "c", "d"]);
   }
 
   // - - - - - - - - - - - - - - - - - - Search - - - - - - - - - - - - - - - - - -  //
-  onSearch(String? value){
-
-  }
+  onSearch(String? value){}
 
 }

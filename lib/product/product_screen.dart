@@ -3,7 +3,6 @@ import 'package:alhawta/product/widgets/product_custom_icon_btn.dart';
 import 'package:alhawta/product/widgets/product_custom_info_tile.dart';
 import 'package:alhawta/product/widgets/product_custom_more_product.dart';
 import 'package:alhawta/product/widgets/product_custom_title_icon.dart';
-import 'package:alhawta/utils/ads/custom_facebook.dart';
 import 'package:alhawta/utils/ads/custom_unity.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_images.dart';
@@ -26,12 +25,13 @@ class ProductScreen extends CustomState {
     final ProductController controller = Get.find<ProductController>();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Back", style: Theme.of(context).textTheme.titleMedium),
+        title: Text("Back", style: Theme.of(context).textTheme.titleLarge),
         centerTitle: false,
+        titleSpacing: 0.0,
         leading: InkWell(
-          onTap: Get.back,
-          overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
-          child: Icon(Iconsax.arrow_left_24, color: darkLightColor(context)),
+            overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
+            onTap: Get.back,
+            child: const Icon(Iconsax.arrow_left_3)
         ),
         actions: [
           Obx(
@@ -39,7 +39,7 @@ class ProductScreen extends CustomState {
                     onTap: (){
                       controller.onUpsertToWishlist(); },
                     overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
-                    child: Icon(controller.isInWishList.isTrue ? Iconsax.heart5 : Iconsax.heart, color: controller.isInWishList.isTrue ? redColor(context) : darkLightColor(context))),
+                    child: Icon(controller.isInWishList.isTrue ? Iconsax.heart5 : Iconsax.heart, size: 22.0, color: controller.isInWishList.isTrue ? redColor(context) : darkLightColor(context))),
           ),
           const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS),
         ],
@@ -107,7 +107,6 @@ class ProductScreen extends CustomState {
               ),
               const SizedBox(height: CustomSizes.SPACE_DEFAULT),
               CustomUnity.banner(),
-              const SizedBox(height: CustomSizes.SPACE_DEFAULT),
               const SizedBox(height: CustomSizes.SPACE_DEFAULT),
               const ProductCustomTitleIcon(title: "Info"),
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),

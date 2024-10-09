@@ -7,6 +7,7 @@ class CustomImages{
   static const String WOMAN_DO_SHOPPING = "assets/images/woman_do_shopping.jpg";
   static const String LOGO = "assets/images/logo.png";
   static const String WHATSAPP = "assets/images/whatsapp_img_white.webp";
+  static const String EMPTY = "assets/images/empty.webp";
 
   // FLAGS
   static const String FLAG_MOROCCO = "assets/images/flags/flag_ma.webp";

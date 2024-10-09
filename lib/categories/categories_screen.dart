@@ -1,4 +1,5 @@
 import 'package:alhawta/categories/widgets/categories_custom_category.dart';
+import 'package:alhawta/categories/widgets/categories_custom_empty.dart';
 import 'package:alhawta/categories/widgets/categories_custom_search.dart';
 import 'package:alhawta/filter/filter_screen.dart';
 import 'package:alhawta/index/index_controller.dart';
@@ -61,7 +62,7 @@ class CategoriesScreen extends CustomState {
                       ),
                     ),
               controller.filteredList.isEmpty
-                  ? const Text("No Item Found")
+                  ? CategoriesCustomEmpty(title: "Result Not Found", description: "Whoops ... ${controller.searchController.text} category not exist !.")
                   : GridView.builder(
                   itemCount: controller.filteredList.length,
                   shrinkWrap: true,

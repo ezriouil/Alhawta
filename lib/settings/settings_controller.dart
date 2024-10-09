@@ -203,4 +203,8 @@ class SettingsController extends GetxController {
       ),
     ));
   }
+
+  void onSubscription(BuildContext context) {
+    Get.defaultDialog();
+  }
 }
