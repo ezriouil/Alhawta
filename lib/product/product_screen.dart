@@ -89,7 +89,6 @@ class ProductScreen extends CustomState {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Obx(
                       () => ConstrainedBox(

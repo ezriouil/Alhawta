@@ -26,7 +26,6 @@ class HomeScreen extends CustomState {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding:  const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -47,18 +46,11 @@ class HomeScreen extends CustomState {
                   CarouselSlider.builder(
                     carouselController: controller.pageController,
                     options: CarouselOptions(
-                      height: 200,
-                      aspectRatio: 16 / 9,
+                      height: context.isTablet ? 400 : 200,
                       viewportFraction: 1,
-                      initialPage: 0,
-                      enableInfiniteScroll: true,
-                      reverse: false,
                       autoPlay: true,
                       autoPlayInterval: const Duration(seconds: 3),
-                      autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                      autoPlayCurve: Curves.fastOutSlowIn,
                       enlargeCenterPage: true,
-                      enlargeFactor: 0.4,
                       onPageChanged: (index, _) { controller.currentPageIndex.value = index; },
                       scrollDirection: Axis.vertical,
                     ),

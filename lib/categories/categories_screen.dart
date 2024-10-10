@@ -67,9 +67,9 @@ class CategoriesScreen extends CustomState {
                   itemCount: controller.filteredList.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisExtent: 90,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: context.isTablet ? 6 : 3,
+                      mainAxisExtent: 100,
                       mainAxisSpacing:4.0,
                       crossAxisSpacing: 2.0),
                   itemBuilder: (BuildContext context, int index) =>

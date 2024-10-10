@@ -61,15 +61,15 @@ class FilterScreen extends CustomState {
                       ? FilterCustomEmpty(title: "Result Not Found", description: "Whoops ... ${controller.searchController.text} product not exist !.")
                       : GridView.builder(
                       padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: context.isTablet ? 4 : 2,
                           mainAxisExtent: 260,
                           mainAxisSpacing: CustomSizes.SPACE_BETWEEN_ITEMS / 2,
                           crossAxisSpacing: 2.0
                       ),
                       itemCount: controller.products.length,
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) =>
                           FilterCustomProduct(
                             imgUri: 'https://images.pexels.com/photos/414144/pexels-photo-414144.jpeg?auto=compress&cs=tinysrgb&w=1200',
