@@ -170,40 +170,6 @@ class HomeScreen extends CustomState {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Top Collections", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", wordSpacing: 1)),
-                    Text("View All", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", color: greenColor(context), fontSize: 12.0)),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                  itemCount: 8,
-                  padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) =>
-                      HomeCustomProduct(
-                          imgUri: 'https://images.pexels.com/photos/4275890/pexels-photo-4275890.jpeg?auto=compress&cs=tinysrgb&w=1200',
-                          title: "Jacket noir",
-                          description: "Une jacket avec bon état pouvez-vous contacter moi.",
-                          onClick: (id){ Get.to( () => const ProductScreen(), arguments: id); },
-                          isLiked: false,
-                          price: 200
-                      )),
-            ),
-            const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-            CustomUnity.banner(),
-            const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-              child: InkWell(
-                onTap: (){},
-                overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
                     Text("Products", style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontFamily: "Pop_Bold", wordSpacing: 1)),
                     Text("View All", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", color: greenColor(context), fontSize: 12.0)),
                   ],

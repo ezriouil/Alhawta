@@ -11,6 +11,8 @@ import 'package:alhawta/filter/filter_screen.dart';
 import 'package:alhawta/home/home_screen.dart';
 import 'package:alhawta/index/index_controller.dart';
 import 'package:alhawta/index/index_screen.dart';
+import 'package:alhawta/new_product/new_product_controller.dart';
+import 'package:alhawta/new_product/new_product_screen.dart';
 import 'package:alhawta/on_boarding_screen.dart';
 import 'package:alhawta/product/product_controller.dart';
 import 'package:alhawta/product/product_screen.dart';
@@ -92,8 +94,9 @@ class Alhawta extends StatelessWidget {
           GetPage(name: '/settingsScreen', page: () => const SettingsScreen()),
           GetPage(name: '/profileScreen', page: () => const ProfileScreen()),
           GetPage(name: '/productScreen', page: () => const ProductScreen()),
+          GetPage(name: '/newProductScreen', page: () => const NewProductScreen()),
         ],
-        home: const OnBoardingScreen()
+        home: const IndexScreen()
     );
   }
 }
@@ -114,6 +117,7 @@ class RootBinding implements Bindings {
     Get.put(SettingsController());
     Get.put(ProfileController());
     Get.put(ProductController());
+    Get.put(NewProductController());
   }
 }
 

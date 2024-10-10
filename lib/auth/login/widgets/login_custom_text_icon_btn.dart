@@ -34,12 +34,12 @@ class LoginCustomTextIconBtn extends CustomState{
             ),
             child: Image.asset(icon),
           ),
-          const Spacer(flex: 2),
+          const Spacer(),
           Text(
             text,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(color: CustomColors.WHITE),
           ),
-          const Spacer(flex: 3),
+          const Spacer(),
         ],
       ),
     );

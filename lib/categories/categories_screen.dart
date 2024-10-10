@@ -69,7 +69,7 @@ class CategoriesScreen extends CustomState {
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: context.isTablet ? 6 : 3,
-                      mainAxisExtent: 100,
+                      mainAxisExtent: context.isTablet ? 100 : 90,
                       mainAxisSpacing:4.0,
                       crossAxisSpacing: 2.0),
                   itemBuilder: (BuildContext context, int index) =>
