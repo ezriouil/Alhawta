@@ -29,8 +29,7 @@ class NewProductCustomTextField extends CustomState{
           contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
           hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: darkLightColor(context), fontSize: 12.0, fontWeight: FontWeight.w300),
           prefixIcon: icon != null ? Icon(icon, color: grayColor(context), size: 18.0) : null,
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: grayColor(context)))),
+          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: grayColor(context)))),
       minLines: minMaxLines ?? 1,
       maxLines: minMaxLines ?? 1,
       maxLength: maxLength,

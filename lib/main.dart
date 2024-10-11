@@ -96,7 +96,7 @@ class Alhawta extends StatelessWidget {
           GetPage(name: '/productScreen', page: () => const ProductScreen()),
           GetPage(name: '/newProductScreen', page: () => const NewProductScreen()),
         ],
-        home: const IndexScreen()
+        home: const NewProductScreen()
     );
   }
 }
