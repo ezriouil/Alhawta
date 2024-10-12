@@ -32,74 +32,91 @@ class NewProductCustomStep3 extends CustomState{
   @override
   Widget execute(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
+        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+        Text("Entrez votre ville", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor(context), fontWeight: FontWeight.normal)),
+
+        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
         DropdownButton(
           value: cityValue,
+          onChanged: (String? newCity){
+            onChangeCity(newCity);
+          },
           alignment: Alignment.bottomCenter,
           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-          selectedItemBuilder: (BuildContext context) => [
-            Container(
-              width: getWidth(context),
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-              margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                border: Border.all(color: grayColor(context)),
-                color: grayColor(context).withOpacity(0.1)
-              ),
-              child: Row(
-                children: [
-                  Icon(Iconsax.building, size: 20, color: grayColor(context)),
-                  const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                  Text(cityValue, style: Theme.of(context).textTheme.bodyMedium),
-                  const Spacer(),
-                  Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor(context))
-                ],
-              ),
-            ),
-          ],
+          selectedItemBuilder: (_) {
+            return cites.map<Widget>(
+                    (String city) => Container(
+                      width: getWidth(context),
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                      margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                          border: Border.all(color: grayColor(context)),
+                          color: grayColor(context).withOpacity(0.1)
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Iconsax.building, size: 20, color: grayColor(context)),
+                          const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                          Text(cityValue, style: Theme.of(context).textTheme.bodyMedium),
+                          const Spacer(),
+                          Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor(context))
+                        ],
+                      ),
+                    )
+            ).toList();
+          },
           iconSize: 0,
           underline: const Divider(color: CustomColors.TRANSPARENT),
           isExpanded: true,
           itemHeight: 50,
           items: cites.map((String city) => DropdownMenuItem(
               value: city,
+
               child: Text(city, style: Theme.of(context).textTheme.bodyLarge)
           )).toList(),
-          onChanged: (String? newCity){ onChangeCity(newCity); },
         ),
 
         const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+
+        Text("Entrez la taille", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor(context), fontWeight: FontWeight.normal)),
+
+        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
         DropdownButton(
           value: sizeValue,
           alignment: Alignment.bottomCenter,
           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-          selectedItemBuilder: (BuildContext context) => [
-            Container(
-              width: getWidth(context),
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-              margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                border: Border.all(color: grayColor(context)),
-                color: grayColor(context).withOpacity(0.1)
-              ),
-              child: Row(
-                children: [
-                  Icon(Iconsax.size, size: 20, color: grayColor(context)),
-                  const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                  Text(sizeValue, style: Theme.of(context).textTheme.bodyMedium),
-                  const Spacer(),
-                  Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor(context))
-                ],
-              ),
-            ),
-          ],
+          selectedItemBuilder: (_) {
+            return sizes.map<Widget>(
+                    (String size) => Container(
+                  width: getWidth(context),
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                  margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                      border: Border.all(color: grayColor(context)),
+                      color: grayColor(context).withOpacity(0.1)
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Iconsax.size, size: 20, color: grayColor(context)),
+                      const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                      Text(sizeValue, style: Theme.of(context).textTheme.bodyMedium),
+                      const Spacer(),
+                      Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor(context))
+                    ],
+                  ),
+                )
+            ).toList();
+          },
           iconSize: 0,
           underline: const Divider(color: CustomColors.TRANSPARENT),
           isExpanded: true,
@@ -108,37 +125,43 @@ class NewProductCustomStep3 extends CustomState{
               value: size,
               child: Text(size, style: Theme.of(context).textTheme.bodyLarge)
           )).toList(),
-          onChanged: (String? newSize){onChangeSize(newSize);},
+          onChanged: onChangeSize,
         ),
 
         const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+
+        Text("Entrez Category", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor(context), fontWeight: FontWeight.normal)),
+
+        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
         DropdownButton(
           value: categoryValue,
           alignment: Alignment.bottomCenter,
           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-          selectedItemBuilder: (BuildContext context) => [
-            Container(
-              width: getWidth(context),
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-              margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                  border: Border.all(color: grayColor(context)),
-                  color: grayColor(context).withOpacity(0.1)
-              ),
-              child: Row(
-                children: [
-                  Image.asset(categoryValue.imgUri, height: 20, width: 20),
-                  const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                  Text(categoryValue.title, style: Theme.of(context).textTheme.bodyMedium),
-                  const Spacer(),
-                  Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor(context))
-                ],
-              ),
-            ),
-          ],
+          selectedItemBuilder: (_) {
+            return categories.map<Widget>(
+                    (NewProductCategoryItem size) => Container(
+                      width: getWidth(context),
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                      margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                          border: Border.all(color: grayColor(context)),
+                          color: grayColor(context).withOpacity(0.1)
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset(categoryValue.imgUri, height: 20, width: 20, color: darkLightColor(context)),
+                          const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                          Text(categoryValue.title, style: Theme.of(context).textTheme.bodyLarge),
+                          const Spacer(),
+                          Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor(context))
+                        ],
+                      ),
+                    )
+            ).toList();
+          },
           iconSize: 0,
           underline: const Divider(color: CustomColors.TRANSPARENT),
           isExpanded: true,
@@ -156,7 +179,7 @@ class NewProductCustomStep3 extends CustomState{
           onChanged: (NewProductCategoryItem? newCategory){onChangeCategory(newCategory);},
         ),
 
-        const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS)
+        const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2)
 
       ],
     );

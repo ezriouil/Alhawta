@@ -22,7 +22,7 @@ class NewProductCustomStep2 extends CustomState{
             validator: titleValidator,
           maxLength: 30,
         ),
-        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
         NewProductCustomTextField(
             controller: descriptionController,
             hint: "Description",

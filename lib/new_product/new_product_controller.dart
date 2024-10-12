@@ -1,9 +1,15 @@
+import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_images.dart';
-import 'package:flutter/widgets.dart';
+import 'package:alhawta/utils/constants/custom_sizes.dart';
+import 'package:avatar_glow/avatar_glow.dart';
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:gal/gal.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 
-class NewProductController extends GetxController {
+class NewProductController extends GetxController with WidgetsBindingObserver {
 
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
   late RxInt currentStep;
@@ -11,6 +17,8 @@ class NewProductController extends GetxController {
   late Rx<NewProductCategoryItem> category;
   late TextEditingController titleController, descriptionController, priceController;
   final _imagePicker = ImagePicker();
+  late List<CameraDescription> _cameras;
+  late CameraController _controller;
 
   // - - - - - - - - - - - - - - - - - - INIT STATES - - - - - - - - - - - - - - - - - -  //
   @override
@@ -18,12 +26,20 @@ class NewProductController extends GetxController {
     super.onInit();
     currentStep = 0.obs;
     thumbnailPath = "".obs;
-    city = cites.first.obs;
+    city = cities.first.obs;
     size = sizes.first.obs;
     category = categories.first.obs;
     titleController = TextEditingController();
     descriptionController = TextEditingController();
     priceController = TextEditingController();
+    init();
+  }
+
+  // - - - - - - - - - - - - - - - - - - INIT - - - - - - - - - - - - - - - - - -  //
+  void init() async{
+    _cameras = await availableCameras();
+    _controller = CameraController(_cameras.first, ResolutionPreset.medium);
+    await _controller.initialize();
   }
 
   // - - - - - - - - - - - - - - - - - - ON CHANGE CITY - - - - - - - - - - - - - - - - - -  //
@@ -38,19 +54,131 @@ class NewProductController extends GetxController {
 
   // - - - - - - - - - - - - - - - - - - PICK IMAGE FROM GALLERY - - - - - - - - - - - - - - - - - -  //
   void onPickImage(BuildContext context) async{
-    try{
-      // PERMISSIONS
+    await showDialog(
+        context: context,
+        // barrierDismissible: false,
+        builder: (BuildContext innerContext) => AlertDialog(
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
 
-      final img = await _imagePicker.pickImage(source: ImageSource.gallery);
-      if(img == null) return;
-      thumbnailPath.value = img.path;
+                // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
+                const SizedBox(height: CustomSizes.SPACE_DEFAULT),
 
-    }catch(_){}
+                // - - - - - - - - - - - - - - - - - - ICON - - - - - - - - - - - - - - - - - -  //
+                Container(
+                  width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+                  height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
+                    color: context.isDarkMode ? CustomColors.GRAY_LIGHT.withOpacity(0.2) : CustomColors.GRAY_DARK.withOpacity(0.2),
+                  ),
+                  child: AvatarGlow(
+                    glowCount: 3,
+                    glowColor: context.isDarkMode ? CustomColors.GRAY_LIGHT.withOpacity(0.1) : CustomColors.GRAY_DARK.withOpacity(0.1),
+                    glowRadiusFactor: 0.2,
+                    child: Icon(
+                        Iconsax.image,
+                        size: CustomSizes.SPACE_BETWEEN_SECTIONS,
+                        color: context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK
+                    ),
+                  ),
+                ),
+
+                // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
+                const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+
+                // - - - - - - - - - - - - - - - - - -  TITLE - - - - - - - - - - - - - - - - - -  //
+                Text(
+                  "IMAGE",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(letterSpacing: 0.6, fontFamily: "Pop_Semi_Bold"),
+                ),
+
+                // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+
+                // - - - - - - - - - - - - - - - - - -  SUB TITLE 1 - - - - - - - - - - - - - - - - - -  //
+                Text(
+                  "By clicking on Delete button you will remove all the items on your wishList.",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
+                  textAlign: TextAlign.center,
+                ),
+
+                // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: ()async{
+                        // HANDEL PERMISSION
+                        Get.back(); /* HIDE THE FIRST DIALOG */
+                        try{
+                          Get.defaultDialog(content: CameraPreview(_controller));
+                          XFile img = await _controller.takePicture();
+                          await Gal.putImage(img.path);
+                          thumbnailPath.value = img.path;
+                        }
+                        catch(_){}
+                      },
+                      overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
+                      child: Container(
+                        height: MediaQuery.of(context).size.width / 5 ,
+                        width: MediaQuery.of(context).size.width / 3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+                          border: Border.all(color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK, width: 0.6),
+                          color: context.isDarkMode ? CustomColors.GREEN_LIGHT.withOpacity(0.2) : CustomColors.GREEN_DARK.withOpacity(0.2),
+                        ),
+                        child: Icon(
+                            Iconsax.camera,
+                            size: 28.0,
+                            color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: ()async{
+                        // HANDEL PERMISSION
+                        Get.back(); /* HIDE THE FIRST DIALOG */
+                        try{
+                          final img = await _imagePicker.pickImage(source: ImageSource.gallery);
+                          if(img == null) return;
+                          thumbnailPath.value = img.path;
+                        }
+                        catch(_){}
+                      },
+                      overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
+                      child: Container(
+                        height: MediaQuery.of(context).size.width / 5 ,
+                        width: MediaQuery.of(context).size.width / 3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+                          border: Border.all(color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK, width: 0.6),
+                          color: context.isDarkMode ? CustomColors.GREEN_LIGHT.withOpacity(0.2) : CustomColors.GREEN_DARK.withOpacity(0.2),
+                        ),
+                        child: Icon(
+                            Iconsax.gallery,
+                            size: 28.0,
+                            color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+              ],
+            ),
+          ),
+        )
+    );
   }
 
   // - - - - - - - - - - - - - - - - - - LIST OF CITIES - - - - - - - - - - - - - - - - - -  //
-  final cites = [
-    'Non',
+  final cities = [
     'Rabat',
     'Salé',
     'Knitra',
@@ -59,7 +187,6 @@ class NewProductController extends GetxController {
   ];
   // - - - - - - - - - - - - - - - - - - LIST OF SIZES - - - - - - - - - - - - - - - - - -  //
   final sizes = [
-    'Non',
     'Small',
     'Medium',
     'Large',
@@ -76,8 +203,6 @@ class NewProductController extends GetxController {
   ];
   // - - - - - - - - - - - - - - - - - - LIST OF CATEGORIES - - - - - - - - - - - - - - - - - -  //
   final categories = <NewProductCategoryItem>[
-    NewProductCategoryItem(title: "Non", imgUri: CustomImages.CATEGORY_ALL),
-    NewProductCategoryItem(title: "All", imgUri: CustomImages.CATEGORY_ALL),
     NewProductCategoryItem(title: "Baenie", imgUri: CustomImages.CATEGORY_BAENIE),
     NewProductCategoryItem(title: "Blousse", imgUri: CustomImages.CATEGORY_BLOUSSE),
     NewProductCategoryItem(title: "Bra", imgUri: CustomImages.CATEGORY_BRA),
@@ -101,6 +226,14 @@ class NewProductController extends GetxController {
     NewProductCategoryItem(title: "Talent", imgUri: CustomImages.CATEGORY_TALENT),
   ];
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if(state == AppLifecycleState.paused) print("PAUSER");
+    if(state == AppLifecycleState.resumed) print("RESUME");
+    if(state == AppLifecycleState.detached) print("DITACHE");
+    else print("NULL");
+  }
 }
 
 class NewProductCategoryItem{
