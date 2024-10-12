@@ -57,8 +57,11 @@ dependencies:
   # PERMISSION
   permission_handler: ^11.3.0
 
-  # IMAGE PICKER
+  # IMAGES
   image_picker: ^1.0.0
+  camera: ^0.11.0+2
+  cached_network_image: ^3.4.0
+  gal: ^2.3.0
 
   # CHANGE APP ICON
   #flutter_launcher_icons: ^0.13.1
@@ -72,7 +75,6 @@ dependencies:
   intl_phone_field: ^3.2.0
   #device_info_plus: ^8.0.0
   avatar_glow: ^3.0.1
-  cached_network_image: ^3.4.0
   readmore: ^2.2.0
   carousel_slider: ^4.2.1
 
