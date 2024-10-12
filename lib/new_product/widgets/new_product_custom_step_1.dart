@@ -8,8 +8,9 @@ import 'package:iconsax/iconsax.dart';
 class NewProductCustomStep1 extends CustomState{
   final String imgPath;
   final GestureTapCallback onPickImage;
+  final bool isLoadingImage;
 
-   const NewProductCustomStep1({super.key, required this.imgPath, required this.onPickImage});
+   const NewProductCustomStep1({super.key, required this.imgPath, required this.onPickImage, required this.isLoadingImage});
 
   @override
   Widget execute(BuildContext context) {
@@ -38,7 +39,14 @@ class NewProductCustomStep1 extends CustomState{
                             Text("Upload Image", style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.normal, fontSize: 12)),
                           ],
                         )) :
-                    Image.file(
+                    isLoadingImage
+                        ? Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                            border: Border.all(color: darkLightColor(context))),
+                        child: SizedBox(width: 30, height: 30, child: CircularProgressIndicator(color: darkLightColor(context), strokeWidth: 2)))
+                        : Image.file(
                         File(imgPath),
                         height: getHeight(context),
                         width: getWidth(context),

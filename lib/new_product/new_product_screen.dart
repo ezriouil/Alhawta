@@ -65,9 +65,18 @@ class NewProductScreen extends CustomState {
                             if(controller.currentStep.value > 0) const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS /2),
                             Expanded(child: NewProductCustomElevatedBtn(
                                     onPressed: (){
-                                      if(controller.currentStep.value != 2) { controller.currentStep.value++; }
-                                      else { debugPrint("SEND DATA TO THE SERVER"); }
-                                      },
+                                      if(controller.currentStep.value == 0){
+                                        if(controller.thumbnailPath.value == "") return;
+                                        controller.currentStep.value++;
+                                      }
+                                      else if(controller.currentStep.value == 1){
+                                        // VALIDATION STEP 1
+                                        controller.currentStep.value++;
+                                      }
+                                      else {
+                                        // VALIDATION STEP 2
+                                        debugPrint("SEND DATA TO THE SERVER");
+                                      }},
                                     bgColor: controller.currentStep.value != 2 ? grayColor(context) : greenColor(context),
                                     textColor: darkDarkLightLightColor(context),
                                     text: controller.currentStep.value == 2 ? "Submit" : "Continue"
@@ -81,6 +90,7 @@ class NewProductScreen extends CustomState {
                           state: controller.currentStep.value  > 0 ? StepState.complete : StepState.disabled,
                           content: NewProductCustomStep1(
                             imgPath: controller.thumbnailPath.value,
+                            isLoadingImage: controller.isImageLoading.value,
                             onPickImage: () { controller.onPickImage(context); },
                           )
                         ),

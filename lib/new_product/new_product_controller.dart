@@ -3,7 +3,9 @@ import 'package:alhawta/utils/constants/custom_images.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gal/gal.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -14,6 +16,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
   late RxInt currentStep;
   late RxString thumbnailPath, size, city;
+  late RxBool isImageLoading;
   late Rx<NewProductCategoryItem> category;
   late TextEditingController titleController, descriptionController, priceController;
   final _imagePicker = ImagePicker();
@@ -26,6 +29,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     currentStep = 0.obs;
     thumbnailPath = "".obs;
+    isImageLoading = false.obs;
     city = cities.first.obs;
     size = sizes.first.obs;
     category = categories.first.obs;
@@ -110,24 +114,76 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
                       onTap: ()async{
                         // HANDEL PERMISSION
                         Get.back(); /* HIDE THE FIRST DIALOG */
                         try{
-                          Get.defaultDialog(content: CameraPreview(_controller));
-                          XFile img = await _controller.takePicture();
-                          await Gal.putImage(img.path);
-                          thumbnailPath.value = img.path;
+
+                          await showDialog(
+                              context: context,
+                              // barrierDismissible: false,
+                              builder: (BuildContext innerContext) => AlertDialog(
+                                contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                insetPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                backgroundColor: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                                elevation: 16,
+                                content: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.width * 0.9,
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      ClipRRect(
+                                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                          child: CameraPreview(_controller)
+                                      ),
+                                      Container(
+                                        alignment: Alignment.bottomCenter,
+                                        padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                              onTap: () async{
+                                                XFile img = await _controller.takePicture();
+                                                Get.back();
+                                                isImageLoading.value = true;
+                                                await Gal.putImage(img.path);
+                                                await Future.delayed(const Duration(milliseconds: 1000));
+                                                thumbnailPath.value = img.path;
+                                                isImageLoading.value = false;
+                                                },
+                                              overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
+                                              child: Container(
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                      color: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                                                      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)
+                                                  ),
+                                                  height: 70,
+                                                  width: 70,
+                                                  child: Icon(Icons.camera, size: 50, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK)
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                          );
+
                         }
                         catch(_){}
                       },
                       overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
                       child: Container(
                         height: MediaQuery.of(context).size.width / 5 ,
-                        width: MediaQuery.of(context).size.width / 3,
+                        width: MediaQuery.of(context).size.width / 4,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
                           border: Border.all(color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK, width: 0.6),
@@ -154,7 +210,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
                       overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
                       child: Container(
                         height: MediaQuery.of(context).size.width / 5 ,
-                        width: MediaQuery.of(context).size.width / 3,
+                        width: MediaQuery.of(context).size.width / 4,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
                           border: Border.all(color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK, width: 0.6),
