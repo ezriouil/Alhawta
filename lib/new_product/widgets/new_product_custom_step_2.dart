@@ -5,33 +5,37 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class NewProductCustomStep2 extends CustomState{
+  final GlobalKey<FormState> formState;
   final TextEditingController titleController, descriptionController;
   final String? Function(String? value)? titleValidator, descriptionValidator;
 
-  const NewProductCustomStep2({super.key, required this.titleController, required this.titleValidator, required this.descriptionController, required this.descriptionValidator });
+  const NewProductCustomStep2({super.key, required this.formState, required this.titleController, required this.titleValidator, required this.descriptionController, required this.descriptionValidator });
 
   @override
   Widget execute(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        NewProductCustomTextField(
-            controller: titleController,
-            hint: "Title",
-            icon: Iconsax.text,
-            validator: titleValidator,
-          maxLength: 30,
-        ),
-        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-        NewProductCustomTextField(
-            controller: descriptionController,
-            hint: "Description",
-            validator: descriptionValidator,
-          minMaxLines: 3,
-          maxLength: 90,
-        ),
-        const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-      ],
+    return Form(
+      key: formState,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          NewProductCustomTextField(
+              controller: titleController,
+              hint: "Title",
+              icon: Iconsax.text,
+              validator: titleValidator,
+            maxLength: 30,
+          ),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+          NewProductCustomTextField(
+              controller: descriptionController,
+              hint: "Description",
+              validator: descriptionValidator,
+            minMaxLines: 3,
+            maxLength: 90,
+          ),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+        ],
+      ),
     );
   }
 }

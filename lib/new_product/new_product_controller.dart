@@ -1,11 +1,10 @@
+import 'package:alhawta/new_product/widgets/new_product_custom_elevated_btn.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_images.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gal/gal.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -19,14 +18,16 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
   late RxBool isImageLoading;
   late Rx<NewProductCategoryItem> category;
   late TextEditingController titleController, descriptionController, priceController;
+  late GlobalKey<FormState> fromState;
   final _imagePicker = ImagePicker();
   late List<CameraDescription> _cameras;
-  late CameraController _controller;
+  late CameraController _cameraController;
 
   // - - - - - - - - - - - - - - - - - - INIT STATES - - - - - - - - - - - - - - - - - -  //
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
     currentStep = 0.obs;
     thumbnailPath = "".obs;
     isImageLoading = false.obs;
@@ -36,20 +37,28 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
     titleController = TextEditingController();
     descriptionController = TextEditingController();
     priceController = TextEditingController();
+    fromState = GlobalKey<FormState>();
     init();
   }
 
   // - - - - - - - - - - - - - - - - - - INIT - - - - - - - - - - - - - - - - - -  //
   void init() async{
+    await _initCameraController();
+  }
+
+  // - - - - - - - - - - - - - - - - - - INIT CAMERA CONTROLLER - - - - - - - - - - - - - - - - - -  //
+  Future<void> _initCameraController() async {
     _cameras = await availableCameras();
-    _controller = CameraController(_cameras.first, ResolutionPreset.medium);
-    await _controller.initialize();
+    _cameraController = CameraController(_cameras.first, ResolutionPreset.medium);
+    await _cameraController.initialize();
   }
 
   // - - - - - - - - - - - - - - - - - - ON CHANGE CITY - - - - - - - - - - - - - - - - - -  //
   void onCityChanged(String? newCity){ city.value = newCity!; }
+
   // - - - - - - - - - - - - - - - - - - ON CHANGE SIZE - - - - - - - - - - - - - - - - - -  //
   void onSizeChanged(String? newSize){ size.value = newSize!; }
+
   // - - - - - - - - - - - - - - - - - - ON CHANGE CATEGORY - - - - - - - - - - - - - - - - - -  //
   void onCategoryChanged(NewProductCategoryItem? newCategory){ category.value = newCategory!; }
 
@@ -60,7 +69,6 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
   void onPickImage(BuildContext context) async{
     await showDialog(
         context: context,
-        // barrierDismissible: false,
         builder: (BuildContext innerContext) => AlertDialog(
           content: SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -105,7 +113,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
 
                 // - - - - - - - - - - - - - - - - - -  SUB TITLE 1 - - - - - - - - - - - - - - - - - -  //
                 Text(
-                  "By clicking on Delete button you will remove all the items on your wishList.",
+                  "You have multi chooses you can take image from the Camera or picking from your Gallery.",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11),
                   textAlign: TextAlign.center,
                 ),
@@ -113,114 +121,94 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
                 // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
 
+
+                // - - - - - - - - - - - - - - - - - -  BUTTONS - - - - - - - - - - - - - - - - - -  //
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    InkWell(
-                      onTap: ()async{
-                        // HANDEL PERMISSION
-                        Get.back(); /* HIDE THE FIRST DIALOG */
-                        try{
-
-                          await showDialog(
-                              context: context,
-                              // barrierDismissible: false,
-                              builder: (BuildContext innerContext) => AlertDialog(
-                                contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                insetPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                backgroundColor: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
-                                elevation: 16,
-                                content: SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: MediaQuery.of(context).size.width * 0.9,
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      ClipRRect(
-                                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                          child: CameraPreview(_controller)
-                                      ),
-                                      Container(
-                                        alignment: Alignment.bottomCenter,
-                                        padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            InkWell(
-                                              onTap: () async{
-                                                XFile img = await _controller.takePicture();
-                                                Get.back();
-                                                isImageLoading.value = true;
-                                                await Gal.putImage(img.path);
-                                                await Future.delayed(const Duration(milliseconds: 1000));
-                                                thumbnailPath.value = img.path;
-                                                isImageLoading.value = false;
-                                                },
-                                              overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
-                                              child: Container(
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                      color: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
-                                                      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)
+                    Expanded(
+                      child: NewProductCustomElevatedBtn(
+                          onPressed: ()async{
+                            // HANDEL PERMISSION
+                            Get.back(); /* HIDE THE FIRST DIALOG */
+                            try{
+                              await showDialog(
+                                  context: context,
+                                  builder: (BuildContext innerContext) => AlertDialog(
+                                    contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                    insetPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                    backgroundColor: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                                    elevation: 16,
+                                    content: SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: MediaQuery.of(context).size.width * 0.9,
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          ClipRRect(
+                                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                              child: CameraPreview(_cameraController)
+                                          ),
+                                          Container(
+                                            alignment: Alignment.bottomCenter,
+                                            padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () async{
+                                                    XFile img = await _cameraController.takePicture();
+                                                    Get.back();
+                                                    isImageLoading.value = true;
+                                                    await Gal.putImage(img.path);
+                                                    await Future.delayed(const Duration(milliseconds: 1000));
+                                                    thumbnailPath.value = img.path;
+                                                    isImageLoading.value = false;
+                                                  },
+                                                  overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
+                                                  child: Container(
+                                                      alignment: Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                          color: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                                                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)
+                                                      ),
+                                                      height: 70,
+                                                      width: 70,
+                                                      child: Icon(Icons.camera, size: 50, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK)
                                                   ),
-                                                  height: 70,
-                                                  width: 70,
-                                                  child: Icon(Icons.camera, size: 50, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK)
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              )
-                          );
-
-                        }
-                        catch(_){}
-                      },
-                      overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width / 5 ,
-                        width: MediaQuery.of(context).size.width / 4,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-                          border: Border.all(color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK, width: 0.6),
-                          color: context.isDarkMode ? CustomColors.GREEN_LIGHT.withOpacity(0.2) : CustomColors.GREEN_DARK.withOpacity(0.2),
-                        ),
-                        child: Icon(
-                            Iconsax.camera,
-                            size: 28.0,
-                            color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK
-                        ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                              );
+                            }
+                            catch(_){}
+                          },
+                          bgColor: context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK,
+                          textColor: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                          text: "Camera"
                       ),
                     ),
-                    InkWell(
-                      onTap: ()async{
-                        // HANDEL PERMISSION
-                        Get.back(); /* HIDE THE FIRST DIALOG */
-                        try{
-                          final img = await _imagePicker.pickImage(source: ImageSource.gallery);
-                          if(img == null) return;
-                          thumbnailPath.value = img.path;
-                        }
-                        catch(_){}
-                      },
-                      overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
-                      child: Container(
-                        height: MediaQuery.of(context).size.width / 5 ,
-                        width: MediaQuery.of(context).size.width / 4,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-                          border: Border.all(color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK, width: 0.6),
-                          color: context.isDarkMode ? CustomColors.GREEN_LIGHT.withOpacity(0.2) : CustomColors.GREEN_DARK.withOpacity(0.2),
-                        ),
-                        child: Icon(
-                            Iconsax.gallery,
-                            size: 28.0,
-                            color: context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK
-                        ),
+                    const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS),
+                    Expanded(
+                      child: NewProductCustomElevatedBtn(
+                          onPressed: ()async{
+                            // HANDEL PERMISSION
+                            Get.back(); /* HIDE THE FIRST DIALOG */
+                            try{
+                              final img = await _imagePicker.pickImage(source: ImageSource.gallery);
+                              if(img == null) return;
+                              thumbnailPath.value = img.path;
+                            }
+                            catch(_){}
+                          },
+                          bgColor: context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK,
+                          textColor: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                          text: "Gallery"
                       ),
                     ),
                   ],
@@ -233,6 +221,9 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
     );
   }
 
+  // - - - - - - - - - - - - - - - - - - INSERT NEW PRODUCT TO DATABASE - - - - - - - - - - - - - - - - - -  //
+  void onInsertNewProduct() {}
+
   // - - - - - - - - - - - - - - - - - - LIST OF CITIES - - - - - - - - - - - - - - - - - -  //
   final cities = [
     'Rabat',
@@ -241,6 +232,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
     'Agadir',
     'Casablanca',
   ];
+
   // - - - - - - - - - - - - - - - - - - LIST OF SIZES - - - - - - - - - - - - - - - - - -  //
   final sizes = [
     'Small',
@@ -257,6 +249,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
     '24',
     '25',
   ];
+
   // - - - - - - - - - - - - - - - - - - LIST OF CATEGORIES - - - - - - - - - - - - - - - - - -  //
   final categories = <NewProductCategoryItem>[
     NewProductCategoryItem(title: "Baenie", imgUri: CustomImages.CATEGORY_BAENIE),
@@ -282,14 +275,22 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
     NewProductCategoryItem(title: "Talent", imgUri: CustomImages.CATEGORY_TALENT),
   ];
 
+  // - - - - - - - - - - - - - - - - - - OVERRIDE LIFECYCLE - - - - - - - - - - - - - - - - - -  //
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if(state == AppLifecycleState.paused) print("PAUSER");
-    if(state == AppLifecycleState.resumed) print("RESUME");
-    if(state == AppLifecycleState.detached) print("DITACHE");
-    else print("NULL");
+
+    if(state == AppLifecycleState.inactive){
+      _cameraController.dispose();
+      return;
+    }
+    if(state == AppLifecycleState.resumed){
+      _initCameraController();
+      return;
+    }
+
   }
+
 }
 
 class NewProductCategoryItem{

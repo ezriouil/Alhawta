@@ -4,6 +4,7 @@ import 'package:alhawta/new_product/widgets/new_product_custom_step_2.dart';
 import 'package:alhawta/new_product/widgets/new_product_custom_step_3.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
+import 'package:alhawta/utils/extensions/validator.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
@@ -70,12 +71,11 @@ class NewProductScreen extends CustomState {
                                         controller.currentStep.value++;
                                       }
                                       else if(controller.currentStep.value == 1){
-                                        // VALIDATION STEP 1
+                                        if(!controller.fromState.currentState!.validate()) return;
                                         controller.currentStep.value++;
                                       }
                                       else {
-                                        // VALIDATION STEP 2
-                                        debugPrint("SEND DATA TO THE SERVER");
+                                        controller.onInsertNewProduct();
                                       }},
                                     bgColor: controller.currentStep.value != 2 ? grayColor(context) : greenColor(context),
                                     textColor: darkDarkLightLightColor(context),
@@ -99,10 +99,11 @@ class NewProductScreen extends CustomState {
                           isActive: controller.currentStep.value >= 1,
                           state: controller.currentStep.value  > 1 ? StepState.complete : StepState.disabled,
                           content: NewProductCustomStep2(
+                            formState: controller.fromState,
                             titleController: controller.titleController,
-                            titleValidator: (String? value) => null,
+                            titleValidator: (String? value) => Validator.validateCustomField(value, "Empty"),
                             descriptionController: controller.descriptionController,
-                            descriptionValidator: (String? value) => null,
+                            descriptionValidator: (String? value) => Validator.validateCustomField(value, "Empty"),
                           )),
                         Step(
                           title: const Text("Details"),
