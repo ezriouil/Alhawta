@@ -13,6 +13,14 @@
    <key>GADApplicationIdentifier</key>
    <string>ca-app-pub-8391987150149440~8609790861</string>
 
+   <key>NSCameraUsageDescription</key>
+   <string>your usage description here</string>
+   <key>NSMicrophoneUsageDescription</key>
+   <string>your usage description here</string>
+
+   <key>NSPhotoLibraryAddUsageDescription</key>
+   <key>NSPhotoLibraryUsageDescription</key>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
