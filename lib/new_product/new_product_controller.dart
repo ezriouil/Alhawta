@@ -67,6 +67,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
 
   // - - - - - - - - - - - - - - - - - - PICK IMAGE FROM GALLERY - - - - - - - - - - - - - - - - - -  //
   void onPickImage(BuildContext context) async{
+    RxBool flashMode = false.obs;
     await showDialog(
         context: context,
         builder: (BuildContext innerContext) => AlertDialog(
@@ -124,65 +125,107 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
 
                 // - - - - - - - - - - - - - - - - - -  BUTTONS - - - - - - - - - - - - - - - - - -  //
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
                       child: NewProductCustomElevatedBtn(
                           onPressed: ()async{
-                            // HANDEL PERMISSION
-                            Get.back(); /* HIDE THE FIRST DIALOG */
+                            // CHECK PERMISSIONS
                             try{
+                              Get.back(); /* HIDE THE FIRST DIALOG */
                               await showDialog(
                                   context: context,
-                                  builder: (BuildContext innerContext) => AlertDialog(
-                                    contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                    insetPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                    backgroundColor: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
-                                    elevation: 16,
-                                    content: SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: MediaQuery.of(context).size.width * 0.9,
-                                      child: Stack(
-                                        fit: StackFit.expand,
-                                        children: [
-                                          ClipRRect(
-                                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                              child: CameraPreview(_cameraController)
-                                          ),
-                                          Container(
-                                            alignment: Alignment.bottomCenter,
-                                            padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                InkWell(
-                                                  onTap: () async{
-                                                    XFile img = await _cameraController.takePicture();
-                                                    Get.back();
-                                                    isImageLoading.value = true;
-                                                    await Gal.putImage(img.path);
-                                                    await Future.delayed(const Duration(milliseconds: 1000));
-                                                    thumbnailPath.value = img.path;
-                                                    isImageLoading.value = false;
-                                                  },
-                                                  overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
-                                                  child: Container(
-                                                      alignment: Alignment.center,
-                                                      decoration: BoxDecoration(
-                                                          color: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
-                                                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)
+                                  barrierDismissible: false,
+                                  builder: (BuildContext innerContext) => PopScope(
+                                      canPop: false,
+                                      child: AlertDialog(
+                                        contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                        insetPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                        backgroundColor: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                                        elevation: 16,
+                                        content: SizedBox(
+                                          width: MediaQuery.of(context).size.width,
+                                          height: MediaQuery.of(context).size.width,
+                                          child: Stack(
+                                            fit: StackFit.expand,
+                                            children: [
+                                              ClipRRect(
+                                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                                  child: CameraPreview(_cameraController)
+                                              ),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    alignment: Alignment.bottomCenter,
+                                                    padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                                    child: InkWell(
+                                                      onTap: Get.back,
+                                                      overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
+                                                      child: Container(
+                                                          alignment: Alignment.center,
+                                                          decoration: BoxDecoration(
+                                                              color: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                                                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)
+                                                          ),
+                                                          height: 50,
+                                                          width: 50,
+                                                          child: Icon(Icons.close, size: 30, color: context.isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK)
                                                       ),
-                                                      height: 70,
-                                                      width: 70,
-                                                      child: Icon(Icons.camera, size: 50, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK)
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
+                                                  Container(
+                                                    alignment: Alignment.bottomCenter,
+                                                    padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                                    child: InkWell(
+                                                      onTap: () async{
+                                                        XFile img = await _cameraController.takePicture();
+                                                        Get.back();
+                                                        isImageLoading.value = true;
+                                                        await Gal.putImage(img.path);
+                                                        await Future.delayed(const Duration(milliseconds: 1000));
+                                                        thumbnailPath.value = img.path;
+                                                        isImageLoading.value = false;
+                                                      },
+                                                      overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
+                                                      child: Container(
+                                                          alignment: Alignment.center,
+                                                          decoration: BoxDecoration(
+                                                              color: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                                                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)
+                                                          ),
+                                                          height: 70,
+                                                          width: 70,
+                                                          child: Icon(Icons.camera, size: 50, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK)
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    alignment: Alignment.bottomCenter,
+                                                    padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                                    child: InkWell(
+                                                      onTap: () async{
+                                                        flashMode.value = !flashMode.value;
+                                                        _cameraController.setFlashMode(flashMode.value ? FlashMode.always : FlashMode.off);
+                                                      },
+                                                      overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
+                                                      child: Container(
+                                                          alignment: Alignment.center,
+                                                          decoration: BoxDecoration(
+                                                              color: context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE,
+                                                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS)
+                                                          ),
+                                                          height: 50,
+                                                          width: 50,
+                                                          child: Obx( () => Icon(flashMode.value ? Icons.flash_on: Icons.flash_off, size: 30, color: flashMode.value ? CustomColors.GOLD : context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK) )
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
                                   )
                               );
                             }
@@ -202,6 +245,9 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
                             try{
                               final img = await _imagePicker.pickImage(source: ImageSource.gallery);
                               if(img == null) return;
+                              isImageLoading.value = true;
+                              await Future.delayed(const Duration(milliseconds: 1000));
+                              isImageLoading.value = false;
                               thumbnailPath.value = img.path;
                             }
                             catch(_){}
@@ -213,6 +259,8 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
                     ),
                   ],
                 ),
+
+                // - - - - - - - - - - - - - - - - - -  SPACER - - - - - - - - - - - - - - - - - -  //
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
               ],
             ),
@@ -220,6 +268,22 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
         )
     );
   }
+
+  // - - - - - - - - - - - - - - - - - - CONTINUE BTN - - - - - - - - - - - - - - - - - -  //
+  void onContinue() {
+    if(currentStep.value == 0){
+      if(thumbnailPath.value == "") return;
+      currentStep.value++;
+    }
+    else if(currentStep.value == 1){
+      if(fromState.currentState!.validate()) return;
+      currentStep.value++;
+    }
+    else { onInsertNewProduct(); }
+  }
+
+  // - - - - - - - - - - - - - - - - - - CANCEL BTN - - - - - - - - - - - - - - - - - -  //
+  void onCancel() { if (currentStep.value != 0) currentStep.value--; }
 
   // - - - - - - - - - - - - - - - - - - INSERT NEW PRODUCT TO DATABASE - - - - - - - - - - - - - - - - - -  //
   void onInsertNewProduct() {}

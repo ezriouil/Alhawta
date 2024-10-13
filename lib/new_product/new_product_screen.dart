@@ -58,25 +58,15 @@ class NewProductScreen extends CustomState {
                           children: [
                             if(controller.currentStep.value > 0) Expanded(
                                     child: NewProductCustomElevatedBtn(
-                                        onPressed: () { if(controller.currentStep.value != 0) controller.currentStep.value--; },
+                                        onPressed: controller.onCancel,
                                         bgColor: redColor(context),
                                         textColor: darkDarkLightLightColor(context),
-                                        text: "Cancel")
+                                        text: "Cancel"
+                                    )
                                 ),
                             if(controller.currentStep.value > 0) const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS /2),
                             Expanded(child: NewProductCustomElevatedBtn(
-                                    onPressed: (){
-                                      if(controller.currentStep.value == 0){
-                                        if(controller.thumbnailPath.value == "") return;
-                                        controller.currentStep.value++;
-                                      }
-                                      else if(controller.currentStep.value == 1){
-                                        if(!controller.fromState.currentState!.validate()) return;
-                                        controller.currentStep.value++;
-                                      }
-                                      else {
-                                        controller.onInsertNewProduct();
-                                      }},
+                                    onPressed: controller.onContinue,
                                     bgColor: controller.currentStep.value != 2 ? grayColor(context) : greenColor(context),
                                     textColor: darkDarkLightLightColor(context),
                                     text: controller.currentStep.value == 2 ? "Submit" : "Continue"
