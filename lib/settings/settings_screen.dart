@@ -60,7 +60,7 @@ class SettingsScreen extends CustomState {
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
 
                 InkWell(
-                  onTap: (){ Get.to( () => const ProfileScreen() ); },
+                  onTap: (){ Get.to( () => const ProfileScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn ); },
                   overlayColor: MaterialStateProperty.all<Color>(CustomColors.TRANSPARENT),
                   child: ListTile(
                     leading: ClipRRect(
@@ -109,7 +109,7 @@ class SettingsScreen extends CustomState {
                     title: "New Product",
                     subTitle: "add new product to your store.",
                     icon: Iconsax.add_circle,
-                    trailing: Icon(Iconsax.arrow_right_3, color: greenColor(context)), onClick: (){ Get.to( ()  => const NewProductScreen() ); }
+                    trailing: Icon(Iconsax.arrow_right_3, color: greenColor(context)), onClick: (){ Get.to( ()  => const NewProductScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn); }
                 ),
 
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -226,7 +226,10 @@ class SettingsScreen extends CustomState {
                     title: "Delete Account",
                     subTitle: "Attention your account will deleted completely.",
                     icon: Iconsax.profile_delete,
-                    trailing: Icon(Iconsax.arrow_right_3, color: greenColor(context)),
+                    titleColor: redColor(context),
+                    subTitleColor: redColor(context).withOpacity(0.8),
+                    leadingIconColor: redColor(context),
+                    trailing: Icon(Iconsax.arrow_right_3, color: redColor(context)),
                     onClick: (){ controller.onDeleteAccount(context); }
                 ),
 

@@ -2,6 +2,7 @@ import 'package:alhawta/filter/filter_controller.dart';
 import 'package:alhawta/filter/widgets/filter_custom_empty.dart';
 import 'package:alhawta/filter/widgets/filter_custom_product.dart';
 import 'package:alhawta/filter/widgets/filter_custom_search.dart';
+import 'package:alhawta/filter/widgets/filter_custom_shimmer_effect.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
@@ -15,6 +16,7 @@ class FilterScreen extends CustomState {
   @override
   Widget execute(BuildContext context) {
     final FilterController controller = Get.find<FilterController>();
+    controller.init();
     return Scaffold(
         appBar: AppBar(
           title: Text("Back", style: Theme.of(context).textTheme.titleLarge),
@@ -36,6 +38,7 @@ class FilterScreen extends CustomState {
         body: Obx(
             () => SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AnimatedContainer(
                     curve: Curves.easeInOut,
@@ -57,7 +60,7 @@ class FilterScreen extends CustomState {
                       ),
                     ),
                   ),
-                  controller.products.isEmpty
+                  controller.isLoading.value ? const FilterCustomShimmerEffect() : controller.products.isEmpty
                       ? FilterCustomEmpty(title: "Result Not Found", description: "Whoops ... ${controller.searchController.text} product not exist !.")
                       : GridView.builder(
                       padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 2),

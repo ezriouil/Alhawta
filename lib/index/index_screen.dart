@@ -15,9 +15,7 @@ class IndexScreen extends CustomState {
     final IndexController controller = Get.find<IndexController>();
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop){
-        IndexController.currentIndex.value = 0;
-      },
+      onPopInvoked: (didPop){ IndexController.currentIndex.value = 0; },
       child: Scaffold(
           body: Obx(
                 () => Stack(

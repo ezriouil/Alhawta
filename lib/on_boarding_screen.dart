@@ -48,7 +48,7 @@ class OnBoardingScreen extends CustomState {
                   side: BorderSide.none,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2))),
                 ),
-                onPressed: (){ Get.off( () => const LoginScreen() ); },
+                onPressed: (){ Get.off( () => const LoginScreen(), transition: Transition.downToUp, duration: const Duration(milliseconds: 2500), curve: Curves.fastOutSlowIn); },
                 child: Text(
                   "Get started",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: darkDarkLightLightColor(context)),

@@ -2,10 +2,10 @@ class CustomImages{
   CustomImages._();
 
   // OTHERS
-  static const String SHOPPING = "assets/images/shopping.png";
-  static const String FOGOT_PASSWORD = "assets/images/forgot_password.png";
-  static const String WOMAN_DO_SHOPPING = "assets/images/woman_do_shopping.jpg";
-  static const String LOGO = "assets/images/logo.png";
+  static const String SHOPPING = "assets/images/shopping.webp";
+  static const String FOGOT_PASSWORD = "assets/images/forgot_password.webp";
+  static const String WOMAN_DO_SHOPPING = "assets/images/woman_do_shopping.webp";
+  static const String LOGO = "assets/images/logo.webp";
   static const String WHATSAPP = "assets/images/whatsapp_img_white.webp";
   static const String EMPTY = "assets/images/empty.webp";
 

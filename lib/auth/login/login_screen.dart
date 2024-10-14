@@ -69,7 +69,7 @@ class LoginScreen extends CustomState {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   InkWell(
-                      onTap: () { Get.to( () => const ForgotPasswordScreen() ); },
+                      onTap: () { Get.to( () => const ForgotPasswordScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn); },
                       overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
                       child: Text("Forgot password ?", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12.0))),
                 ],
@@ -86,7 +86,7 @@ class LoginScreen extends CustomState {
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
               LoginCustomElevatedBtn(
-                onPressed: (){ Get.to( () => const RegisterScreen() ); },
+                onPressed: (){ Get.to( () => const RegisterScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn); },
                 text: "Crée un compte gratuitement",
                 bgColor: grayColor(context),
               ),

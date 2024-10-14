@@ -5,13 +5,16 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileController extends GetxController {
 
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
   late GlobalKey<FormState> formKey;
   late TextEditingController fullNameController, emailController, whatsappController, createdAtController;
-  late RxBool editMode;
+  late RxString imgPath;
+  late RxBool editMode, isImageLoading;
+  final _imagePicker = ImagePicker();
 
   // - - - - - - - - - - - - - - - - - - INIT STATES - - - - - - - - - - - - - - - - - -  //
   @override
@@ -23,10 +26,19 @@ class ProfileController extends GetxController {
     whatsappController = TextEditingController();
     createdAtController = TextEditingController();
     editMode = false.obs;
+    isImageLoading = false.obs;
+    imgPath = "".obs;
   }
 
   // - - - - - - - - - - - - - - - - - - ENABLE EDIT MODE - - - - - - - - - - - - - - - - - -  //
-  void onEditMode(){ editMode.value = !editMode.value; }
+  void onEditMode() async{
+    editMode.value = !editMode.value;
+    if(editMode.value) return; /* WE ARE ON EDIT MODE */
+    isImageLoading.value = true;
+    await Future.delayed(const Duration(milliseconds: 800));
+    imgPath.value = "";
+    isImageLoading.value = false;
+  }
 
   // - - - - - - - - - - - - - - - - - - BUTTON UPDATE - - - - - - - - - - - - - - - - - -  //
   void onUpdate(BuildContext context) async{
@@ -176,7 +188,9 @@ class ProfileController extends GetxController {
                   children: [
                     Expanded(
                       child: ProfileCustomElevatedBtn(
-                        onPressed: (){ Get.back(); },
+                        onPressed: (){
+                          Get.back();
+                          },
                         text: "Dismiss",
                         bgColor: CustomColors.GRAY_LIGHT,
                         textColor: CustomColors.BLACK,
@@ -185,7 +199,19 @@ class ProfileController extends GetxController {
                     const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                     Expanded(
                       child: ProfileCustomElevatedBtn(
-                        onPressed: (){ Get.back(); },
+                        onPressed: ()async{
+                          // HANDEL PERMISSION
+                          try{
+                            final img = await _imagePicker.pickImage(source: ImageSource.gallery);
+                            if(img == null) return;
+                            Get.back();
+                            isImageLoading.value = true;
+                            await Future.delayed(const Duration(milliseconds: 1500));
+                            isImageLoading.value = false;
+                            imgPath.value = img.path;
+                          }
+                          catch(_){}
+                        },
                         text: "Gallery",
                         bgColor: CustomColors.GOLD,
                       ),

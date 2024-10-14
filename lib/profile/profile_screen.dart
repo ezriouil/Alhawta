@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:alhawta/profile/profile_controller.dart';
 import 'package:alhawta/profile/widgets/profile_custom_elevated_btn.dart';
 import 'package:alhawta/profile/widgets/profile_custom_text_field.dart';
@@ -47,8 +49,8 @@ class ProfileScreen extends CustomState {
 
                   // IMAGE
                   Container(
-                    width: 130.0,
-                    height: 130.0,
+                    width: getWidth(context) / 2,
+                    height: getWidth(context) / 2,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                         border: Border.all(color: grayColor(context), width: 2)
@@ -57,7 +59,8 @@ class ProfileScreen extends CustomState {
                         borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 3),
                         child: Stack(
                           children: [
-                            CachedNetworkImage(
+                            controller.imgPath.value == ""
+                                ? CachedNetworkImage(
                               imageUrl:  "https://i.ytimg.com/vi/PbZl6LGcCZQ/hqdefault.jpg?sqp=-oaymwE9CNACELwBSFryq4qpAy8IARUAAAAAGAElAADIQj0AgKJDeAHwAQH4Af4JgALQBYoCDAgAEAEYZSBlKGUwDw==&rs=AOn4CLBno3KYDaH-Zn1TWV0FotWdkOp-Uw",
                               height: getHeight(context),
                               width: getWidth(context),
@@ -88,6 +91,14 @@ class ProfileScreen extends CustomState {
                                       border: Border.all(color: grayColor(context)),
                                       borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
                                   child: Icon(Iconsax.gallery_remove, size: 30.0, color: grayColor(context))),
+                            )
+                                : controller.isImageLoading.value
+                                ? Center(child: CircularProgressIndicator(color: greenColor(context)))
+                                : Image.file(
+                                File(controller.imgPath.value),
+                                height: getHeight(context),
+                                width: getWidth(context),
+                                fit: BoxFit.cover
                             ),
                             if(controller.editMode.value) InkWell(
                               overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
@@ -95,8 +106,8 @@ class ProfileScreen extends CustomState {
                               child: Container(
                                 height: getHeight(context),
                                 width: getWidth(context),
-                                color: grayColor(context).withOpacity(0.4),
-                                child: const Icon(Iconsax.edit, color: CustomColors.BLACK),
+                                color: controller.isImageLoading.value ? CustomColors.TRANSPARENT : grayColor(context).withOpacity(0.6),
+                                child: Icon(Iconsax.gallery_edit, color: controller.isImageLoading.value ? CustomColors.TRANSPARENT : darkDarkLightLightColor(context), size: 40),
                               ),
                             ),
                           ],
@@ -104,7 +115,7 @@ class ProfileScreen extends CustomState {
                     ),
                   ),
 
-                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+                  const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
 
                   // FULL NAME
                   ProfileCustomTextField(

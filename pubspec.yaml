@@ -57,6 +57,9 @@ dependencies:
   # PERMISSION
   permission_handler: ^11.3.0
 
+  # LOADING
+  shimmer: ^3.0.0
+
   # IMAGES
   image_picker: ^1.0.0
   camera: ^0.11.0+2

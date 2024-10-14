@@ -42,14 +42,13 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
   }
 
   // - - - - - - - - - - - - - - - - - - INIT - - - - - - - - - - - - - - - - - -  //
-  void init() async{
-    await _initCameraController();
-  }
+  void init() async{}
 
   // - - - - - - - - - - - - - - - - - - INIT CAMERA CONTROLLER - - - - - - - - - - - - - - - - - -  //
   Future<void> _initCameraController() async {
     _cameras = await availableCameras();
     _cameraController = CameraController(_cameras.first, ResolutionPreset.medium);
+    if(_cameraController.value.isInitialized) return;
     await _cameraController.initialize();
   }
 
@@ -67,9 +66,10 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
 
   // - - - - - - - - - - - - - - - - - - PICK IMAGE FROM GALLERY - - - - - - - - - - - - - - - - - -  //
   void onPickImage(BuildContext context) async{
+    await _initCameraController();
     RxBool flashMode = false.obs;
     await showDialog(
-        context: context,
+        context: context.mounted ? context : context,
         builder: (BuildContext innerContext) => AlertDialog(
           content: SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -182,7 +182,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
                                                         Get.back();
                                                         isImageLoading.value = true;
                                                         await Gal.putImage(img.path);
-                                                        await Future.delayed(const Duration(milliseconds: 1000));
+                                                        await Future.delayed(const Duration(milliseconds: 1500));
                                                         thumbnailPath.value = img.path;
                                                         isImageLoading.value = false;
                                                       },
@@ -246,7 +246,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
                               final img = await _imagePicker.pickImage(source: ImageSource.gallery);
                               if(img == null) return;
                               isImageLoading.value = true;
-                              await Future.delayed(const Duration(milliseconds: 1000));
+                              await Future.delayed(const Duration(milliseconds: 1500));
                               isImageLoading.value = false;
                               thumbnailPath.value = img.path;
                             }
