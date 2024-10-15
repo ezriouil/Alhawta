@@ -2,6 +2,7 @@ import 'package:alhawta/index/index_controller.dart';
 import 'package:alhawta/new_product/new_product_screen.dart';
 import 'package:alhawta/profile/profile_screen.dart';
 import 'package:alhawta/settings/widgets/settings_custom_tile.dart';
+import 'package:alhawta/store/store_screen.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
@@ -109,17 +110,19 @@ class SettingsScreen extends CustomState {
                     title: "New Product",
                     subTitle: "add new product to your store.",
                     icon: Iconsax.add_circle,
-                    trailing: Icon(Iconsax.arrow_right_3, color: greenColor(context)), onClick: (){ Get.to( ()  => const NewProductScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn); }
+                    trailing: Icon(Iconsax.arrow_right_3, color: greenColor(context)),
+                    onClick: (){ Get.to( ()  => const NewProductScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn); }
                 ),
 
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
 
                 // - - - - - - - - - - - - - - - - - - ALL PRODUCTS - - - - - - - - - - - - - - - - - -  //
                 SettingsCustomTile(
-                    title: "All Products",
+                    title: "My Store",
                     subTitle: "see all product of my store.",
                     icon: Iconsax.shop,
-                    trailing: Icon(Iconsax.arrow_right_3, color: greenColor(context)), onClick: (){}
+                    trailing: Icon(Iconsax.arrow_right_3, color: greenColor(context)),
+                    onClick: (){ Get.to( ()  => const StoreScreen(), transition: Transition.rightToLeft, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn); }
                 ),
 
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
