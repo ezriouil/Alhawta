@@ -6,14 +6,15 @@ import 'package:flutter/material.dart';
 class HomeCustomIconBtn extends CustomState{
   final GestureTapCallback onPressed;
   final IconData icon;
+  final double? size;
 
-   const HomeCustomIconBtn({super.key, required this.onPressed, required this.icon});
+   const HomeCustomIconBtn({super.key, required this.onPressed, required this.icon, this.size = 36.0});
 
   @override
   Widget execute(BuildContext context) {
     return Container(
-      width: 36.0,
-      height: 36.0,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
           border: Border.all(color: darkLightColor(context), width: 0.4),

@@ -22,8 +22,6 @@ import 'package:alhawta/settings/settings_controller.dart';
 import 'package:alhawta/settings/settings_screen.dart';
 import 'package:alhawta/store/store_controller.dart';
 import 'package:alhawta/store/store_screen.dart';
-import 'package:alhawta/utils/ads/custom_admob.dart';
-import 'package:alhawta/utils/ads/custom_facebook.dart';
 import 'package:alhawta/utils/ads/custom_unity.dart';
 import 'package:alhawta/utils/remote/custom_app_write.dart';
 import 'package:alhawta/utils/remote/custom_firebase.dart';
@@ -47,9 +45,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // - - - - - - - - - - - - - - - - - - INITIALISATION ADS - - - - - - - - - - - - - - - - - -  //
-  CustomAdmob.setup();
+  // CustomAdmob.setup();
   CustomUnity.setup();
-  CustomFacebook.setup();
+  // CustomFacebook.setup();
 
   // - - - - - - - - - - - - - - - - - - INITIALISATION DATABASES - - - - - - - - - - - - - - - - - -  //
   CustomFirebase.setup(
@@ -68,7 +66,7 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   // - - - - - - - - - - - - - - - - - - SHOW ADMOB APP OPEN - - - - - - - - - - - - - - - - - -  //
-  /*  CustomAdmob.appOpen(); */
+  /* CustomAdmob.appOpen(); */
 
   runApp(const Alhawta());
 }
@@ -99,7 +97,7 @@ class Alhawta extends StatelessWidget {
           GetPage(name: '/newProductScreen', page: () => const NewProductScreen()),
           GetPage(name: '/StoreScreen', page: () => const StoreScreen()),
         ],
-        home: const IndexScreen()
+        home: const OnBoardingScreen()
     );
   }
 }

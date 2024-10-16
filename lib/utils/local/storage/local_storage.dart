@@ -4,16 +4,11 @@ class LocalStorage {
   LocalStorage._();
 
 // - - - - - - - - - - - - - - - - - -  INSERT OR UPDATE - - - - - - - - - - - - - - - - -  //
-  static Future<bool> upsert(
-      {required String key,
-      required dynamic value,
-      required GetStorage storage}) async {
+  static Future<bool> upsert({required String key, required dynamic value, required GetStorage storage}) async {
     try {
       await storage.write(key, value);
       return true;
-    } catch (_) {
-      return false;
-    }
+    } catch (_) { return false; }
   }
 
 // - - - - - - - - - - - - - - - - - -  READ - - - - - - - - - - - - - - - - - -  //

@@ -11,7 +11,6 @@ import 'package:alhawta/utils/state/custom_state.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
@@ -99,13 +98,13 @@ class ProductScreen extends CustomState {
                             maxHeight: 110,
                           ),
                           child: controller.admobIsNativeAdLoaded.isTrue
-                              ? AdWidget(ad: controller.admobNativeAd)
+                              ? /*AdWidget(ad: controller.admobNativeAd)*/ Text("data")
                               : Center(child: Text("AD Loading", style: Theme.of(context).textTheme.bodyLarge)
                           )
                       )
               ),
               const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-              CustomUnity.banner(),
+              // CustomUnity.banner(),
               const SizedBox(height: CustomSizes.SPACE_DEFAULT),
               const ProductCustomTitleIcon(title: "Info"),
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
@@ -133,7 +132,7 @@ class ProductScreen extends CustomState {
                 lessStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: greenColor(context)),
               ),
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-              Obx(
+              /*Obx(
                     () => SizedBox(
                       height: 50.0,
                       width: getWidth(context),
@@ -142,7 +141,7 @@ class ProductScreen extends CustomState {
                           : Center(child: Text("AD Loading", style: Theme.of(context).textTheme.bodyLarge)
                       ),
                     ),
-              ),
+              ),*/
               const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
               const ProductCustomTitleIcon(title: "More Products"),
             ],

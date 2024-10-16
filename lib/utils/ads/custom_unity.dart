@@ -5,7 +5,7 @@ import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 class CustomUnity{
   CustomUnity._();
 
-  /* INFO */
+  /*INFO*/
   static const _androidGameId = "5708799";
   static const _iosGameId = "5708798";
   static final String _gameId = Platform.isAndroid ? _androidGameId : _iosGameId;

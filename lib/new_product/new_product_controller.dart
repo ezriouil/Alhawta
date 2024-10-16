@@ -45,11 +45,15 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
   void init() async{}
 
   // - - - - - - - - - - - - - - - - - - INIT CAMERA CONTROLLER - - - - - - - - - - - - - - - - - -  //
-  Future<void> _initCameraController() async {
-    _cameras = await availableCameras();
-    _cameraController = CameraController(_cameras.first, ResolutionPreset.medium);
-    if(_cameraController.value.isInitialized) return;
-    await _cameraController.initialize();
+  Future<bool> _initCameraController() async {
+    try{
+      _cameras = await availableCameras();
+      _cameraController = CameraController(_cameras.first, ResolutionPreset.medium);
+      if(_cameraController.value.isInitialized) return true;
+      await _cameraController.initialize();
+      return true;
+    }
+    catch(e){ return false; }
   }
 
   // - - - - - - - - - - - - - - - - - - ON CHANGE CITY - - - - - - - - - - - - - - - - - -  //
@@ -66,7 +70,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
 
   // - - - - - - - - - - - - - - - - - - PICK IMAGE FROM GALLERY - - - - - - - - - - - - - - - - - -  //
   void onPickImage(BuildContext context) async{
-    await _initCameraController();
+    final bool isInitCameraController = await _initCameraController();
     RxBool flashMode = false.obs;
     await showDialog(
         context: context.mounted ? context : context,
@@ -130,10 +134,15 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
                       child: NewProductCustomElevatedBtn(
                           onPressed: ()async{
                             // CHECK PERMISSIONS
+
                             try{
                               Get.back(); /* HIDE THE FIRST DIALOG */
+                              if(!isInitCameraController){
+                                 /* SHOW MESSAGE CANNOT OPEN CAMERA */
+                                return;
+                              }
                               await showDialog(
-                                  context: context,
+                                  context: context.mounted ? context: context,
                                   barrierDismissible: false,
                                   builder: (BuildContext innerContext) => PopScope(
                                       canPop: false,
@@ -344,7 +353,7 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    if(state == AppLifecycleState.inactive){
+    if(state == AppLifecycleState.paused || state == AppLifecycleState.detached){
       _cameraController.dispose();
       return;
     }

@@ -9,6 +9,7 @@ import 'package:alhawta/utils/ads/custom_unity.dart';
 import 'package:alhawta/utils/constants/custom_images.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -25,26 +26,24 @@ class HomeScreen extends CustomState {
   Widget execute(BuildContext context) {
     final HomeController controller = Get.find<HomeController>();
     return Scaffold(
+      appBar: AppBar(
+        leading: Image.asset(CustomImages.LOGO, width: 100, color: darkLightColor(context)),
+        leadingWidth: 100,
+        actions: [
+          HomeCustomIconBtn(onPressed: (){ Get.to( () => const FilterScreen(), arguments: "All" ); }, icon: Iconsax.search_normal),
+          const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Obx(
                 () => Column(
                   children: [
+                    const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
                     Padding(
                       padding:  const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(CustomImages.LOGO, width: 100, color: darkLightColor(context)),
-                              const Spacer(),
-                              HomeCustomIconBtn(onPressed: (){ IndexController.currentIndex.value = 1; }, icon: Iconsax.filter),
-                              const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                              HomeCustomIconBtn(onPressed: (){ Get.to( () => const FilterScreen(), arguments: "All" ); }, icon: Iconsax.search_normal),
-                            ],
-                          ),
-                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
                           CarouselSlider.builder(
                             carouselController: controller.pageController,
                             options: CarouselOptions(

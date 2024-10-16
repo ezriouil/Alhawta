@@ -87,7 +87,7 @@ class RegisterScreen extends CustomState {
 
               RegisterCustomElevatedBtn(
                 onPressed: controller.onCreateAccount,
-                text: "Login",
+                text: "Register",
                 bgColor: greenColor(context),
               ),
 

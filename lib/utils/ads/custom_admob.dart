@@ -30,7 +30,7 @@ class CustomAdmob{
     //const androidAdUnitId = "ca-app-pub-3940256099942544/6300978111";
     //const iosAdUnitId = "ca-app-pub-3940256099942544/2934735716";
     //final String adUnitId = Platform.isAndroid ? androidAdUnitId : iosAdUnitId;
-    const String adUnitId = "ca-app-pub-3940256099942544/1033173712";
+    final String adUnitId = Platform.isAndroid ? 'ca-app-pub-3940256099942544/1033173712' : 'ca-app-pub-3940256099942544/4411468910';
     await InterstitialAd.load(
         adUnitId: adUnitId,
         request: const AdRequest(),
@@ -46,7 +46,7 @@ class CustomAdmob{
     //const androidAdUnitId = "ca-app-pub-3940256099942544/6300978111";
     //const iosAdUnitId = "ca-app-pub-3940256099942544/2934735716";
     //final String adUnitId = Platform.isAndroid ? androidAdUnitId : iosAdUnitId;
-    const String adUnitId = "ca-app-pub-3940256099942544/9257395921";
+    final String adUnitId = Platform.isAndroid ? "ca-app-pub-3940256099942544/9257395921" : 'ca-app-pub-3940256099942544/2934735716';
     await AppOpenAd.load(
         adUnitId: adUnitId,
         request: const AdRequest(),
@@ -61,7 +61,7 @@ class CustomAdmob{
               }catch(_){}
             },
             onAdFailedToLoad: (LoadAdError error){}
-        )
+        ), orientation: AppOpenAd.orientationPortrait
     );
   }
 
@@ -103,7 +103,7 @@ class CustomAdmob{
     //const androidAdUnitId = "ca-app-pub-3940256099942544/6300978111";
     //const iosAdUnitId = "ca-app-pub-3940256099942544/2934735716";
     //final String adUnitId = Platform.isAndroid ? androidAdUnitId : iosAdUnitId;
-    const String adUnitId = "ca-app-pub-3940256099942544/5224354917";
+    final String adUnitId = Platform.isAndroid ? 'ca-app-pub-3940256099942544/5224354917' : 'ca-app-pub-3940256099942544/1712485313';
     RewardedAd.load(
         adUnitId: adUnitId,
         request: const AdRequest(),

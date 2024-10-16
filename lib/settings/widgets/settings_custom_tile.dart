@@ -6,7 +6,7 @@ import '../../../utils/state/custom_state.dart';
 
 class SettingsCustomTile extends CustomState {
   final String title, subTitle;
-  final Color? titleColor, subTitleColor, leadingIconColor;
+  final Color? leadingIconColor;
   final IconData icon;
   final Widget? trailing;
   final  GestureTapCallback? onClick;
@@ -18,8 +18,6 @@ class SettingsCustomTile extends CustomState {
       required this.subTitle,
       required this.icon,
        this.onClick,
-       this.titleColor,
-       this.subTitleColor,
        this.leadingIconColor,
       this.iconSize = 30.0,
       this.titleSize = 12.0,
@@ -41,9 +39,9 @@ class SettingsCustomTile extends CustomState {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style : Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: titleSize, fontFamily: "Pop_Semi_Bold", color: titleColor ?? darkLightColor(context))),
+                Text(title, style : Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: titleSize, fontFamily: "Pop_Semi_Bold")),
                 Text(
-                  subTitle, style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: subTitleSize, color: subTitleColor ?? grayColor(context)),
+                  subTitle, style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: subTitleSize),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

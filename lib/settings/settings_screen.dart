@@ -229,8 +229,6 @@ class SettingsScreen extends CustomState {
                     title: "Delete Account",
                     subTitle: "Attention your account will deleted completely.",
                     icon: Iconsax.profile_delete,
-                    titleColor: redColor(context),
-                    subTitleColor: redColor(context).withOpacity(0.8),
                     leadingIconColor: redColor(context),
                     trailing: Icon(Iconsax.arrow_right_3, color: redColor(context)),
                     onClick: (){ controller.onDeleteAccount(context); }

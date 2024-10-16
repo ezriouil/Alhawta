@@ -1,3 +1,4 @@
+/*
 import 'dart:io';
 
 import 'package:facebook_audience_network/facebook_audience_network.dart';
@@ -6,7 +7,9 @@ import 'package:flutter/material.dart';
 class CustomFacebook{
   CustomFacebook._();
 
-  /* SETUP */
+  */
+/* SETUP *//*
+
   static void setup() async{
     await FacebookAudienceNetwork.init(
         testingId: "37b1da9d-b48c-4103-a393-2e095e734bd6", //optional
@@ -108,4 +111,4 @@ class CustomFacebook{
     );
   }
 
-}
+}*/

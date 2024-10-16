@@ -7,19 +7,19 @@
     <array>
        <string>tel</string>
    	</array>
+
+   <key>NSPhotoLibraryAddUsageDescription</key>
+   <key>NSPhotoLibraryUsageDescription</key>
     <key>NSPhotoLibraryUsageDescription</key>
    <string>App needs access to photo lib for profile images</string>
-
-   <key>GADApplicationIdentifier</key>
-   <string>ca-app-pub-8391987150149440~8609790861</string>
 
    <key>NSCameraUsageDescription</key>
    <string>your usage description here</string>
    <key>NSMicrophoneUsageDescription</key>
    <string>your usage description here</string>
 
-   <key>NSPhotoLibraryAddUsageDescription</key>
-   <key>NSPhotoLibraryUsageDescription</key>
+   <key>GADApplicationIdentifier</key>
+   <string>ca-app-pub-8391987150149440~8609790861</string>
 
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
