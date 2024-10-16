@@ -70,9 +70,9 @@ dependencies:
   #flutter_launcher_icons: ^0.13.1
 
   # ADS
-  google_mobile_ads: ^5.0.0
-  unity_ads_plugin: ^0.3.20
-  facebook_audience_network: ^1.0.1
+  # google_mobile_ads: ^5.0.0
+  #unity_ads_plugin: ^0.3.20
+  #facebook_audience_network: ^1.0.1
 
   # OTHERS
   intl_phone_field: ^3.2.0
