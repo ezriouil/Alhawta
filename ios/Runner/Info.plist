@@ -3,20 +3,19 @@
 <plist version="1.0">
 <dict>
 
+    <key>NSCameraUsageDescription</key>
+    <string>your usage description here</string>
+
+    <key>NSMicrophoneUsageDescription</key>
+    <string>your usage description here</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Allow access to photo library</string>
+
     <key>LSApplicationQueriesSchemes</key>
     <array>
        <string>tel</string>
    	</array>
-
-   <key>NSPhotoLibraryAddUsageDescription</key>
-   <key>NSPhotoLibraryUsageDescription</key>
-    <key>NSPhotoLibraryUsageDescription</key>
-   <string>App needs access to photo lib for profile images</string>
-
-   <key>NSCameraUsageDescription</key>
-   <string>your usage description here</string>
-   <key>NSMicrophoneUsageDescription</key>
-   <string>your usage description here</string>
 
    <key>GADApplicationIdentifier</key>
    <string>ca-app-pub-8391987150149440~8609790861</string>
