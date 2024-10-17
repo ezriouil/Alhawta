@@ -353,10 +353,10 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    if(state == AppLifecycleState.paused || state == AppLifecycleState.detached){
-      _cameraController.dispose();
-      return;
-    }
+    // if(state == AppLifecycleState.inactive){
+    //   _cameraController.dispose();
+    //   return;
+    // }
     if(state == AppLifecycleState.resumed){
       _initCameraController();
       return;

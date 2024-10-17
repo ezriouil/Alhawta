@@ -106,20 +106,23 @@ class Alhawta extends StatelessWidget {
 class RootBinding implements Bindings {
   @override
   void dependencies() {
+    /* <<< PUT >>> */
     Get.put(Connectivity());
-    Get.put(LoginController());
-    Get.put(RegisterController());
-    Get.put(ForgotPasswordController());
     Get.put(IndexController());
     Get.put(HomeController());
     Get.put(CategoriesController());
-    Get.put(FilterController());
     Get.put(WishListController());
     Get.put(SettingsController());
-    Get.put(ProfileController());
-    Get.put(ProductController());
-    Get.put(NewProductController());
-    Get.put(StoreController());
+
+    /* <<< LAZY PUT >>> */
+    Get.lazyPut( () => LoginController(), fenix: true);
+    Get.lazyPut( () => RegisterController(), fenix: true);
+    Get.lazyPut( () => ForgotPasswordController(), fenix: true);
+    Get.lazyPut( () => FilterController(), fenix: true);
+    Get.lazyPut( () => ProfileController(), fenix: true);
+    Get.lazyPut( () => ProductController(), fenix: true);
+    Get.lazyPut( () => NewProductController(), fenix: true);
+    Get.lazyPut( () => StoreController(), fenix: true);
   }
 }
 

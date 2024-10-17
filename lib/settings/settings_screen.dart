@@ -54,10 +54,6 @@ class SettingsScreen extends CustomState {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-
-                Text("Profile", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Bold", letterSpacing: 0)),
-
                 const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
 
                 InkWell(
