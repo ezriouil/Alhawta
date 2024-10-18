@@ -33,14 +33,13 @@ class StoreController extends GetxController {
   // - - - - - - - - - - - - - - - - - - INIT - - - - - - - - - - - - - - - - - -  //
   init() async{
     isLoading.value = true;
-
     await Future.delayed(const Duration(milliseconds: 5000));
     storeProducts.value = ["A", "B", "C", "D"];
     isLoading.value = false;
   }
 
   // - - - - - - - - - - - - - - - - - - EDIT PRODUCT - - - - - - - - - - - - - - - - - -  //
-  void onUpdateBottomSheet({required Product product, required BuildContext context}) {
+  void onUpdateBottomSheet({required Product product, required BuildContext context}) async{
     const Duration duration = Duration(milliseconds: 800);
     Get.bottomSheet(
         enableDrag: true,
@@ -70,6 +69,7 @@ class StoreController extends GetxController {
     final grayColor = context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK;
     final darkDarkLightLightColor = context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE;
     final greenColor = context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK;
+    final redColor = context.isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK;
     final getHeight = MediaQuery.of(context).size.height;
     final getWidth = MediaQuery.of(context).size.width;
 
@@ -77,6 +77,10 @@ class StoreController extends GetxController {
     TextEditingController titleController = TextEditingController(text: product.title);
     TextEditingController descriptionController = TextEditingController(text: product.description);
     TextEditingController whatsappController = TextEditingController(text: product.phoneNumber);
+
+    RxBool isUpdating = false.obs;
+    RxString errorMsg = "".obs;
+    RxString successMessage = "".obs;
 
     RxDouble height = 0.6.obs;
     RxString imgPath = "".obs;
@@ -98,217 +102,300 @@ class StoreController extends GetxController {
                 width: MediaQuery.of(context).size.width,
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT, vertical: CustomSizes.SPACE_BETWEEN_ITEMS),
-                  child: Form(
-                    key: formState,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  child: isUpdating.value
+                      ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(color: greenColor, backgroundColor: greenColor.withOpacity(0.2)),
+                      const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+                      Text("Please wait few seconds", style: Theme.of(context).textTheme.bodyMedium),
+                    ],
+                  ) /* IS LOADING */
+                      : errorMsg.value != ""
+                      ? Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              onTap: (){
-                                if(height.value == 0.9) {height.value = 0.6; }
-                                else {height.value = 0.9; }
-                              },
-                              overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
-                              child: AvatarGlow(glowColor: grayColor, child: Icon(height.value == 0.9 ? Iconsax.arrow_circle_down : Iconsax.arrow_circle_up, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK, size: 26)),
+                        // - - - - - - - - - - - - - - - - - - ICON - - - - - - - - - - - - - - - - - -  //
+                        Container(
+                          width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+                          padding: const EdgeInsets.only(bottom: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
+                            color: redColor.withOpacity(0.2),
+                          ),
+                          child: AvatarGlow(
+                            glowCount: 3,
+                            glowColor: redColor.withOpacity(0.1),
+                            glowRadiusFactor: 0.2,
+                            child: Icon(
+                                Iconsax.close_circle,
+                                size: CustomSizes.SPACE_BETWEEN_SECTIONS,
+                                color: redColor
                             ),
-                            Text("Update", style: Theme.of(context).textTheme.titleLarge),
-                            InkWell(
-                              onTap: () {
-                                _bottomSheetAlertDialog(
-                                    context: context,
-                                    icon: Iconsax.close_circle,
-                                    iconColorLight: CustomColors.RED_LIGHT,
-                                    iconColorDark: CustomColors.RED_DARK,
-                                    title: 'Are You Sure',
-                                    subTitle: 'By clicking on Exit button you will remove all your updates.',
-                                    titleBtnConfirm: 'Exit',
-                                    titleBtnCancel: 'Dismiss',
-                                    titleBtnConfirmColor: context.isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK,
-                                    onClickBtnConfirm: () async {
-                                      Get.back(); /* CLOSE DIALOG */
-                                      await Future.delayed(const Duration(milliseconds: 500)); /* HOLD HALF SECOND */
-                                      Get.back(); /* CLOSE BOTTOM SHEET */
-                                    },
-                                    onClickBtnCancel: (){ Get.back(); /* CLOSE DIALOG */ }
-                                );
-                              },
-                              overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
-                              child: Icon(Iconsax.close_circle, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK, size: 26),
-                            )
-                          ],
+                          ),
+                        ),
+                        Text("Error 404", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: redColor)),
+                      ]) /* HAD ERROR MESSAGE */
+                      : successMessage.value != ""
+                      ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+                        Text("Updated Successfully !", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: greenColor)),
+                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+                        Container(
+                          width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+                          height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
+                            color: greenColor.withOpacity(0.2),
+                          ),
+                          child: AvatarGlow(
+                            glowCount: 3,
+                            glowColor: greenColor.withOpacity(0.1),
+                            glowRadiusFactor: 0.2,
+                            child: Icon(
+                                Icons.check_circle_outline_outlined,
+                                size: CustomSizes.SPACE_BETWEEN_SECTIONS,
+                                color: greenColor
+                            ),
+                          ),
                         ),
                         const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-                        Center(child: InkWell(
-                          onTap: (){
-                            _bottomSheetAlertDialog(
-                                context: context,
-                                icon: Iconsax.image,
-                                iconColorLight: CustomColors.GREEN_LIGHT,
-                                iconColorDark: CustomColors.GREEN_DARK,
-                                title: 'Pick Image',
-                                subTitle: 'By click on Gallery button automatically you will go to the images of your device.',
-                                titleBtnConfirm: 'Gallery',
-                                titleBtnCancel: 'Dismiss',
-                                titleBtnConfirmColor: greenColor,
-                                onClickBtnConfirm: () async {
-                                  try{
-                                    /* HANDEL PERMISSIONS */
-                                    final img = await imagePicker.pickImage(source: ImageSource.gallery);
-                                    if(img == null) return;
-                                    Get.back(); /* CLOSE DIALOG */
-                                    await Future.delayed(const Duration(milliseconds: 500)); /* HOLD HALF SECOND */
-                                    imgPath.value = img.path;
-                                  }
-                                  catch(_){}
+                        StoreCustomElevatedBtn(onPressed: Get.back, bgColor: greenColor, text: "Dismiss")
+                      ]) /* DONE SUCCESSFULLY */
+                      : Form(
+                      key: formState,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                  if(height.value == 0.9) {height.value = 0.6; }
+                                  else {height.value = 0.9; }
                                 },
-                                onClickBtnCancel: (){ Get.back(); /* CLOSE DIALOG */ }
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                          child: Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                  child: SizedBox(
-                                      height: getWidth / 2,
-                                      width: getWidth / 2,
-                                      child: imgPath.value == ""
-                                          ? CachedNetworkImage(
-                                        imageUrl:  product.thumbnail ?? "",
-                                        height: getHeight,
-                                        width: getWidth,
-                                        fit: BoxFit.cover,
-                                        progressIndicatorBuilder: (context, url, downloadProgress) => Container(
-                                            width: getWidth,
-                                            height: getHeight,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(color: grayColor),
-                                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 1, color: darkLightColor, backgroundColor: grayColor, value: downloadProgress.progress)),
-                                                const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                                                Text(downloadProgress.progress != null ? "${(downloadProgress.progress! * 100).toStringAsFixed(2)} %" : "Loading", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 12.0, fontWeight: FontWeight.w300))
-                                              ],
-                                            )
-                                        ),
-                                        errorWidget: (context, url, error) => Container(
-                                            height: getHeight,
-                                            width: getWidth,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(color: grayColor),
-                                                borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
-                                            child: Icon(Iconsax.gallery_remove, size: 30.0, color: grayColor
-                                            )
-                                        ),
-                                      )
-                                          : Image.file(
-                                          File(imgPath.value),
+                                overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
+                                child: AvatarGlow(glowColor: grayColor, child: Icon(height.value == 0.9 ? Iconsax.arrow_circle_down : Iconsax.arrow_circle_up, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK, size: 26)),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  _bottomSheetAlertDialog(
+                                      context: context,
+                                      icon: Iconsax.close_circle,
+                                      iconColorLight: CustomColors.RED_LIGHT,
+                                      iconColorDark: CustomColors.RED_DARK,
+                                      title: 'Are You Sure',
+                                      subTitle: 'By clicking on Exit button you will remove all your updates.',
+                                      titleBtnConfirm: 'Exit',
+                                      titleBtnCancel: 'Dismiss',
+                                      titleBtnConfirmColor: context.isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK,
+                                      onClickBtnConfirm: () async {
+                                        Get.back(); /* CLOSE DIALOG */
+                                        await Future.delayed(const Duration(milliseconds: 500)); /* HOLD HALF SECOND */
+                                        Get.back(); /* CLOSE BOTTOM SHEET */
+                                      },
+                                      onClickBtnCancel: (){ Get.back(); /* CLOSE DIALOG */ }
+                                  );
+                                },
+                                overlayColor: MaterialStateProperty.all<Color?>(CustomColors.TRANSPARENT),
+                                child: Icon(Iconsax.close_circle, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK, size: 26),
+                              )
+                            ],
+                          ),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+                          Center(child: InkWell(
+                            onTap: (){
+                              _bottomSheetAlertDialog(
+                                  context: context,
+                                  icon: Iconsax.image,
+                                  iconColorLight: CustomColors.GREEN_LIGHT,
+                                  iconColorDark: CustomColors.GREEN_DARK,
+                                  title: 'Pick Image',
+                                  subTitle: 'By click on Gallery button automatically you will go to the images of your device.',
+                                  titleBtnConfirm: 'Gallery',
+                                  titleBtnCancel: 'Dismiss',
+                                  titleBtnConfirmColor: greenColor,
+                                  onClickBtnConfirm: () async {
+                                    try{
+                                      /* HANDEL PERMISSIONS */
+                                      final img = await imagePicker.pickImage(source: ImageSource.gallery);
+                                      if(img == null) return;
+                                      Get.back(); /* CLOSE DIALOG */
+                                      await Future.delayed(const Duration(milliseconds: 500)); /* HOLD HALF SECOND */
+                                      imgPath.value = img.path;
+                                    }
+                                    catch(_){}
+                                  },
+                                  onClickBtnCancel: (){ Get.back(); /* CLOSE DIALOG */ }
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                            child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                                    child: SizedBox(
+                                        height: getWidth / 2,
+                                        width: getWidth / 2,
+                                        child: imgPath.value == ""
+                                            ? CachedNetworkImage(
+                                          imageUrl:  product.thumbnail ?? "",
                                           height: getHeight,
                                           width: getWidth,
                                           fit: BoxFit.cover,
-                                          errorBuilder: (context, url, error) => Container(
+                                          progressIndicatorBuilder: (context, url, downloadProgress) => Container(
+                                              width: getWidth,
+                                              height: getHeight,
                                               alignment: Alignment.center,
                                               decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                                  border: Border.all(color: darkLightColor)),
-                                              child: Icon(Iconsax.image, size: 30.0, color: grayColor)
+                                                  border: Border.all(color: grayColor),
+                                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)
+                                              ),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 1, color: darkLightColor, backgroundColor: grayColor, value: downloadProgress.progress)),
+                                                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+                                                  Text(downloadProgress.progress != null ? "${(downloadProgress.progress! * 100).toStringAsFixed(2)} %" : "Loading", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 12.0, fontWeight: FontWeight.w300))
+                                                ],
+                                              )
+                                          ),
+                                          errorWidget: (context, url, error) => Container(
+                                              height: getHeight,
+                                              width: getWidth,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: grayColor),
+                                                  borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
+                                              child: Icon(Iconsax.gallery_remove, size: 30.0, color: grayColor
+                                              )
+                                          ),
+                                        )
+                                            : Image.file(
+                                            File(imgPath.value),
+                                            height: getHeight,
+                                            width: getWidth,
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (context, url, error) => Container(
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                                                    border: Border.all(color: darkLightColor)),
+                                                child: Icon(Iconsax.image, size: 30.0, color: grayColor)
+                                            )
+                                        )
+                                    ),
+                                  ),
+                                  Positioned(
+                                      right: 0,
+                                      bottom: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 3),
+                                          decoration: BoxDecoration(
+                                              color: darkDarkLightLightColor,
+                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2))),
+                                          child: Icon(
+                                            Iconsax.gallery_edit,
+                                            color: darkLightColor,
+                                            size: 20.0,
                                           )
                                       )
                                   ),
-                                ),
-                                Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                        padding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS / 3),
-                                        decoration: BoxDecoration(
-                                            color: darkDarkLightLightColor,
-                                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2))),
-                                        child: Icon(
-                                          Iconsax.gallery_edit,
-                                          color: darkLightColor,
-                                          size: 20.0,
-                                        )
-                                    )
-                                ),
-                              ]
+                                ]
+                            ),
+                          )),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+
+                          Text("Title", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+                          StoreCustomTextField(
+                            controller: titleController,
+                            hint: "Title",
+                            icon: Iconsax.text,
+                            validator: (value) => Validator.validateCustomField(value, "Title should not be empty"),
+                            maxLength: 30,
                           ),
-                        )),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-                        StoreCustomTextField(
-                          controller: titleController,
-                          hint: "Title",
-                          icon: Iconsax.text,
-                          validator: (value) => Validator.validateCustomField(value, "Title should not be empty"),
-                          maxLength: 30,
-                        ),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        StoreCustomTextField(
-                          controller: descriptionController,
-                          hint: "Description",
-                          validator: (value) => Validator.validateCustomField(value, "Description should not be empty"),
-                          minMaxLines: 3,
-                          maxLength: 90,
-                        ),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        Text("Entrez votre ville", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        DropdownButton(
-                          value: city.value,
-                          onChanged: (String? newCity){ city.value = newCity!; },
-                          alignment: Alignment.bottomCenter,
-                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-                          selectedItemBuilder: (_) => _cities.map<Widget>(
-                                  (String cityItem) => Container(
-                                width: getWidth,
-                                alignment: Alignment.centerLeft,
-                                padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                                margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                    border: Border.all(color: grayColor),
-                                    color: grayColor.withOpacity(0.1)
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+                          Text("Discription", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+                          StoreCustomTextField(
+                            controller: descriptionController,
+                            hint: "Description",
+                            validator: (value) => Validator.validateCustomField(value, "Description should not be empty"),
+                            minMaxLines: 3,
+                            maxLength: 90,
+                          ),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+
+                          Text("Whatsapp", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+                          IntlPhoneField(
+                            controller: whatsappController,
+                            decoration: InputDecoration(
+                                fillColor: grayColor.withOpacity(0.1),
+                                filled: true,
+                                hintText: "Whatsapp",
+                                contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                counterStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: grayColor, fontSize: 10),
+                                hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: darkLightColor,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w300
                                 ),
-                                child: Row(
-                                  children: [
-                                    Icon(Iconsax.building, size: 20.0, color: grayColor),
-                                    const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                    Text(cityItem, style: Theme.of(context).textTheme.bodyMedium),
-                                    const Spacer(),
-                                    Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor)
-                                  ],
-                                ),
-                              )
-                          ).toList(),
-                          iconSize: 0,
-                          underline: const Divider(color: CustomColors.TRANSPARENT),
-                          isExpanded: true,
-                          itemHeight: 50.0,
-                          items: _cities.map(
-                                  (String cityItem) => DropdownMenuItem(
-                                  value: cityItem,
-                                  child: Text(cityItem, style: Theme.of(context).textTheme.bodyLarge)
-                              )
-                          ).toList(),
-                        ),
-                        const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-                        Text("Entrez la taille", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        DropdownButton(
-                          value: size.value,
-                          onChanged: (String? newSize){ size.value = newSize!;},
-                          alignment: Alignment.bottomCenter,
-                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-                          selectedItemBuilder: (_) {
-                            return _sizes.map<Widget>(
-                                    (String sizeItem) => Container(
+                                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: grayColor))),
+                            initialCountryCode: product.initialCountryCode ?? 'MA',
+                            cursorColor: darkLightColor,
+                            languageCode: "fr",
+                            pickerDialogStyle: PickerDialogStyle(
+                                searchFieldCursorColor: greenColor,
+                                searchFieldInputDecoration: InputDecoration(
+                                    fillColor: grayColor.withOpacity(0.1),
+                                    filled: true,
+                                    hintText: "Pick your country",
+                                    contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
+                                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: grayColor))),
+                                countryCodeStyle: Theme.of(context).textTheme.bodyLarge,
+                                countryNameStyle: Theme.of(context).textTheme.bodyLarge,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: CustomSizes.SPACE_DEFAULT,
+                                    horizontal: CustomSizes.SPACE_BETWEEN_ITEMS
+                                )
+                            ),
+                            dropdownIcon: Icon(Iconsax.arrow_down_1, size: 18, color: grayColor),
+                            dropdownTextStyle: Theme.of(context).textTheme.bodyLarge,
+                            invalidNumberMessage: "Invalid",
+                            flagsButtonMargin: const EdgeInsets.only(top: 2, left: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                            onChanged: (phone) {},
+                          ),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+                          Text("La Ville", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+                          DropdownButton(
+                            value: city.value,
+                            onChanged: (String? newCity){ city.value = newCity!; },
+                            alignment: Alignment.bottomCenter,
+                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+                            selectedItemBuilder: (_) => _cities.map<Widget>(
+                                    (String cityItem) => Container(
                                   width: getWidth,
                                   alignment: Alignment.centerLeft,
                                   padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
@@ -320,117 +407,149 @@ class StoreController extends GetxController {
                                   ),
                                   child: Row(
                                     children: [
-                                      Icon(Iconsax.size, size: 20, color: grayColor),
+                                      Icon(Iconsax.building, size: 20.0, color: grayColor),
                                       const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                      Text(sizeItem, style: Theme.of(context).textTheme.bodyMedium),
+                                      Text(cityItem, style: Theme.of(context).textTheme.bodyMedium),
                                       const Spacer(),
                                       Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor)
                                     ],
                                   ),
                                 )
-                            ).toList();
-                          },
-                          iconSize: 0,
-                          underline: const Divider(color: CustomColors.TRANSPARENT),
-                          isExpanded: true,
-                          itemHeight: 50,
-                          items: _sizes.map((String sizeItem) => DropdownMenuItem(
-                              value: sizeItem,
-                              child: Text(sizeItem, style: Theme.of(context).textTheme.bodyLarge)
-                          )).toList(),
-                        ),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-                        Text("Entrez Category", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        DropdownButton(
-                          value: category.value,
-                          onChanged: (String? newCategory){ category.value = newCategory!;},
-                          alignment: Alignment.bottomCenter,
-                          borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
-                          selectedItemBuilder: (_) {
-                            return _categories.map<Widget>(
-                                    (String categoryItem) => Container(
-                                  width: getWidth,
-                                  alignment: Alignment.centerLeft,
-                                  padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
-                                  margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                      border: Border.all(color: grayColor),
-                                      color: grayColor.withOpacity(0.1)
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(Iconsax.category, size: 20, color: grayColor),
-                                      const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                                      Text(categoryItem, style: Theme.of(context).textTheme.bodyMedium),
-                                      const Spacer(),
-                                      Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor)
-                                    ],
-                                  ),
+                            ).toList(),
+                            iconSize: 0,
+                            underline: const Divider(color: CustomColors.TRANSPARENT),
+                            isExpanded: true,
+                            itemHeight: 50.0,
+                            items: _cities.map(
+                                    (String cityItem) => DropdownMenuItem(
+                                    value: cityItem,
+                                    child: Text(cityItem, style: Theme.of(context).textTheme.bodyLarge)
                                 )
-                            ).toList();
-                          },
-                          iconSize: 0,
-                          underline: const Divider(color: CustomColors.TRANSPARENT),
-                          isExpanded: true,
-                          itemHeight: 50,
-                          items: _categories.map((String categoryItem) => DropdownMenuItem(
-                              value: categoryItem,
-                              child: Text(categoryItem, style: Theme.of(context).textTheme.bodyLarge)
-                          )).toList(),
-                        ),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-                        Text("Entrez Whatsapp", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                        IntlPhoneField(
-                          controller: whatsappController,
-                          decoration: InputDecoration(
-                              fillColor: grayColor.withOpacity(0.1),
-                              filled: true,
-                              hintText: "Whatsapp",
-                              contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
-                              hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: darkLightColor,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w300
-                              ),
-                              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: grayColor))),
-                          initialCountryCode: product.initialCountryCode ?? 'MA',
-                          cursorColor: darkLightColor,
-                          languageCode: "fr",
-                          pickerDialogStyle: PickerDialogStyle(
-                              searchFieldCursorColor: greenColor,
-                              searchFieldInputDecoration: InputDecoration(
-                                  fillColor: grayColor.withOpacity(0.1),
-                                  filled: true,
-                                  hintText: "Pick your country",
-                                  contentPadding: const EdgeInsets.all(CustomSizes.SPACE_BETWEEN_ITEMS),
-                                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: grayColor))),
-                              countryCodeStyle: Theme.of(context).textTheme.bodyLarge,
-                              countryNameStyle: Theme.of(context).textTheme.bodyLarge,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: CustomSizes.SPACE_DEFAULT,
-                                  horizontal: CustomSizes.SPACE_BETWEEN_ITEMS
-                              )
+                            ).toList(),
                           ),
-                          dropdownIcon: Icon(Iconsax.arrow_down_1, size: 18, color: grayColor),
-                          dropdownTextStyle: Theme.of(context).textTheme.bodyLarge,
-                          invalidNumberMessage: "Invalid",
-                          flagsButtonMargin: const EdgeInsets.only(top: 2, left: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-                          onChanged: (phone) {},
-                        ),
-                        const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-                        StoreCustomElevatedBtn(onPressed: (){}, bgColor: greenColor, text: "Validate"),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
-                      ],
-                    )
-                  )
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+
+                          Text("La Taille", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+                          DropdownButton(
+                            value: size.value,
+                            onChanged: (String? newSize){ size.value = newSize!;},
+                            alignment: Alignment.bottomCenter,
+                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+                            selectedItemBuilder: (_) {
+                              return _sizes.map<Widget>(
+                                      (String sizeItem) => Container(
+                                    width: getWidth,
+                                    alignment: Alignment.centerLeft,
+                                    padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                                    margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                                        border: Border.all(color: grayColor),
+                                        color: grayColor.withOpacity(0.1)
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(Iconsax.size, size: 20, color: grayColor),
+                                        const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                                        Text(sizeItem, style: Theme.of(context).textTheme.bodyMedium),
+                                        const Spacer(),
+                                        Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor)
+                                      ],
+                                    ),
+                                  )
+                              ).toList();
+                            },
+                            iconSize: 0,
+                            underline: const Divider(color: CustomColors.TRANSPARENT),
+                            isExpanded: true,
+                            itemHeight: 50,
+                            items: _sizes.map((String sizeItem) => DropdownMenuItem(
+                                value: sizeItem,
+                                child: Text(sizeItem, style: Theme.of(context).textTheme.bodyLarge)
+                            )).toList(),
+                          ),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+
+                          Text("Category", style: Theme.of(context).textTheme.bodyLarge?.copyWith(wordSpacing: 1, letterSpacing: 0.2, color: grayColor, fontWeight: FontWeight.normal)),
+
+                          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+
+                          DropdownButton(
+                            value: category.value,
+                            onChanged: (String? newCategory){ category.value = newCategory!;},
+                            alignment: Alignment.bottomCenter,
+                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS),
+                            selectedItemBuilder: (_) {
+                              return _categories.map<Widget>(
+                                      (String categoryItem) => Container(
+                                    width: getWidth,
+                                    alignment: Alignment.centerLeft,
+                                    padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                                    margin: const EdgeInsets.only(right: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                                        border: Border.all(color: grayColor),
+                                        color: grayColor.withOpacity(0.1)
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(Iconsax.category, size: 20, color: grayColor),
+                                        const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                                        Text(categoryItem, style: Theme.of(context).textTheme.bodyMedium),
+                                        const Spacer(),
+                                        Icon(Iconsax.arrow_down_1, size: 20, color: darkLightColor)
+                                      ],
+                                    ),
+                                  )
+                              ).toList();
+                            },
+                            iconSize: 0,
+                            underline: const Divider(color: CustomColors.TRANSPARENT),
+                            isExpanded: true,
+                            itemHeight: 50,
+                            items: _categories.map((String categoryItem) => DropdownMenuItem(
+                                value: categoryItem,
+                                child: Text(categoryItem, style: Theme.of(context).textTheme.bodyLarge)
+                            )).toList(),
+                          ),
+
+                          const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+
+                          StoreCustomElevatedBtn(
+                              bgColor: greenColor,
+                              text: "Validate",
+                              onPressed: () async{
+                                try{
+                                  isUpdating.value = true;
+                                  height.value = 0.2;
+                                  await Future.delayed(const Duration(milliseconds: 5000));
+                                  isUpdating.value = false;
+                                  height.value = 0.4;
+                                  successMessage.value = "Product updated successfully";
+                                }
+                                catch(_){
+                                  isUpdating.value = false;
+                                  height.value = 0.6;
+                                  errorMsg.value = "Cannot update this product currently";
+                                }
+                              }
+                          ),
+
+                          const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+                        ],
+                      )
+                  ) /* BOTTOM SHEET CONTENT */
                 ),
               ),
             )
         )
     );
+
   }
 
   /* BOTTOM SHEET DIALOG */

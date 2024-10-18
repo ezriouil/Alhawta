@@ -25,7 +25,7 @@ class StoreScreen extends CustomState {
         titleSpacing: 0.0,
         leading: InkWell(
             overlayColor: MaterialStateProperty.all(CustomColors.TRANSPARENT),
-            onTap: (Get.isBottomSheetOpen ?? false) ? null : Get.back,
+            onTap: Get.back,
             child: const Icon(Iconsax.arrow_left_3)
         ),
       ),
@@ -51,7 +51,7 @@ class StoreScreen extends CustomState {
                       size: "Medium",
                       city: "Knitra",
                       phoneNumber: "624778355",
-                      initialCountryCode: "+212",
+                      initialCountryCode: 'MA',
                       description: "Jacket noir black size 23 more data should you check out our website.",
                     ),
                     onView: (id){ Get.to( () => const ProductScreen(), arguments: id ); },
