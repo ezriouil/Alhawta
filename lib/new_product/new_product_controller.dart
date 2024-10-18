@@ -361,7 +361,6 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
       _initCameraController();
       return;
     }
-
   }
 
 }
