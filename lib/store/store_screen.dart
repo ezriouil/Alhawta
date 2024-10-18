@@ -1,5 +1,6 @@
 import 'package:alhawta/new_product/new_product_screen.dart';
 import 'package:alhawta/product/product_screen.dart';
+import 'package:alhawta/store/data/product.dart';
 import 'package:alhawta/store/store_controller.dart';
 import 'package:alhawta/store/widgets/store_custom_empty.dart';
 import 'package:alhawta/store/widgets/store_custom_product.dart';
@@ -42,12 +43,19 @@ class StoreScreen extends CustomState {
             ),
             itemBuilder: (BuildContext context, int index) =>
                 StoreCustomProduct(
-                    imgUri: 'https://i.ytimg.com/vi/YsMObMEAE_Q/hqdefault.jpg?sqp=-oaymwE9CNACELwBSFryq4qpAy8IARUAAAAAGAElAADIQj0AgKJDeAHwAQH4Af4JgALQBYoCDAgAEAEYciBMKDQwDw==&rs=AOn4CLDxhoRTxvhGQTp3uKFUNfqCHMQyYw',
-                    id: 'randomId',
-                    title: "Jacket noir",
-                    description: "Jacket noir black size 23 more data should you check out our website.",
+                    product: Product(
+                      id: 'randomId',
+                      thumbnail: 'https://i.ytimg.com/vi/YsMObMEAE_Q/hqdefault.jpg?sqp=-oaymwE9CNACELwBSFryq4qpAy8IARUAAAAAGAElAADIQj0AgKJDeAHwAQH4Af4JgALQBYoCDAgAEAEYciBMKDQwDw==&rs=AOn4CLDxhoRTxvhGQTp3uKFUNfqCHMQyYw',
+                      title: "Jacket noir",
+                      category: 'Coat',
+                      size: "Medium",
+                      city: "Knitra",
+                      phoneNumber: "624778355",
+                      initialCountryCode: "+212",
+                      description: "Jacket noir black size 23 more data should you check out our website.",
+                    ),
                     onView: (id){ Get.to( () => const ProductScreen(), arguments: id ); },
-                    onUpdate: (String id){ controller.onUpdateBottomSheet(productId: id, context: context); }
+                    onUpdate: (Product product){ controller.onUpdateBottomSheet(product: product, context: context); }
                 )
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:alhawta/store/data/product.dart';
 import 'package:alhawta/store/widgets/store_custom_btn.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/state/custom_state.dart';
@@ -6,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class StoreCustomProduct extends CustomState {
-  final String id, imgUri, title, description;
-  final void Function(String id) onView, onUpdate;
-  const StoreCustomProduct({super.key, required this.imgUri, required this.id,  required this.title, required this.description, required this.onView, required this.onUpdate});
+  final Product product;
+  final void Function(String id) onView;
+  final void Function(Product product) onUpdate;
+  const StoreCustomProduct({super.key, required this.product, required this.onView, required this.onUpdate});
 
   @override
   Widget execute(BuildContext context) {
@@ -26,7 +28,7 @@ class StoreCustomProduct extends CustomState {
               borderRadius:
               const BorderRadius.only(topLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2), bottomLeft: Radius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2)),
               child: CachedNetworkImage(
-                imageUrl: imgUri,
+                imageUrl: product.thumbnail ?? "",
                 height: 120,
                 width: 120,
                 fit: BoxFit.cover,
@@ -66,16 +68,16 @@ class StoreCustomProduct extends CustomState {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(title, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", fontSize: 14, wordSpacing: 1, letterSpacing: 0), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(product.title ?? "", style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontFamily: "Pop_Semi_Bold", fontSize: 14, wordSpacing: 1, letterSpacing: 0), maxLines: 1, overflow: TextOverflow.ellipsis),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
-                  Text(description, style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11), maxLines: 2, overflow: TextOverflow.ellipsis),
+                  Text(product.description ?? "", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11), maxLines: 2, overflow: TextOverflow.ellipsis),
                   const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      StoreCustomBtn(onPressed: (){ onUpdate(id); }, bgColor: blueColor(context), title: "Update"),
+                      StoreCustomBtn(onPressed: (){ onUpdate(product); }, bgColor: blueColor(context), title: "Update"),
                       const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
-                      StoreCustomBtn(onPressed: (){ onView(id); }, bgColor: greenColor(context), title: "View")
+                      StoreCustomBtn(onPressed: (){ onView(product.id ?? ""); }, bgColor: greenColor(context), title: "View")
                     ],
                   ),
                 ],
