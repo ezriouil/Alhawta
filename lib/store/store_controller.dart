@@ -69,7 +69,6 @@ class StoreController extends GetxController {
     final grayColor = context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK;
     final darkDarkLightLightColor = context.isDarkMode ? CustomColors.BLACK : CustomColors.WHITE;
     final greenColor = context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK;
-    final redColor = context.isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK;
     final getHeight = MediaQuery.of(context).size.height;
     final getWidth = MediaQuery.of(context).size.width;
 
@@ -103,67 +102,11 @@ class StoreController extends GetxController {
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: CustomSizes.SPACE_DEFAULT, vertical: CustomSizes.SPACE_BETWEEN_ITEMS),
                   child: isUpdating.value
-                      ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(color: greenColor, backgroundColor: greenColor.withOpacity(0.2)),
-                      const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-                      Text("Please wait few seconds", style: Theme.of(context).textTheme.bodyMedium),
-                    ],
-                  ) /* IS LOADING */
+                      ?  _bottomSheetLoading(context: context) /* IS LOADING */
                       : errorMsg.value != ""
-                      ? Column(
-                      children: [
-                        // - - - - - - - - - - - - - - - - - - ICON - - - - - - - - - - - - - - - - - -  //
-                        Container(
-                          width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
-                          padding: const EdgeInsets.only(bottom: CustomSizes.SPACE_BETWEEN_ITEMS),
-                          height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
-                            color: redColor.withOpacity(0.2),
-                          ),
-                          child: AvatarGlow(
-                            glowCount: 3,
-                            glowColor: redColor.withOpacity(0.1),
-                            glowRadiusFactor: 0.2,
-                            child: Icon(
-                                Iconsax.close_circle,
-                                size: CustomSizes.SPACE_BETWEEN_SECTIONS,
-                                color: redColor
-                            ),
-                          ),
-                        ),
-                        Text("Error 404", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: redColor)),
-                      ]) /* HAD ERROR MESSAGE */
+                      ? _bottomSheetError(context: context, title: "Failure updating", body: "body") /* HAD ERROR MESSAGE */
                       : successMessage.value != ""
-                      ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: CustomSizes.SPACE_DEFAULT),
-                        Text("Updated Successfully !", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: greenColor)),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-                        Container(
-                          width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
-                          height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_SECTIONS),
-                            color: greenColor.withOpacity(0.2),
-                          ),
-                          child: AvatarGlow(
-                            glowCount: 3,
-                            glowColor: greenColor.withOpacity(0.1),
-                            glowRadiusFactor: 0.2,
-                            child: Icon(
-                                Icons.check_circle_outline_outlined,
-                                size: CustomSizes.SPACE_BETWEEN_SECTIONS,
-                                color: greenColor
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
-                        StoreCustomElevatedBtn(onPressed: Get.back, bgColor: greenColor, text: "Dismiss")
-                      ]) /* DONE SUCCESSFULLY */
+                      ? _bottomSheetSuccess(context: context, title: "Updated successfully !", body: "body") /* DONE SUCCESSFULLY */
                       : Form(
                       key: formState,
                       child: Column(
@@ -534,7 +477,7 @@ class StoreController extends GetxController {
                                 }
                                 catch(_){
                                   isUpdating.value = false;
-                                  height.value = 0.6;
+                                  height.value = 0.4;
                                   errorMsg.value = "Cannot update this product currently";
                                 }
                               }
@@ -549,7 +492,85 @@ class StoreController extends GetxController {
             )
         )
     );
+  }
 
+  /* BOTTOM SHEET LOADING */
+  Widget _bottomSheetLoading({ required BuildContext context }){
+    final greenColor = context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK;
+    return Column(
+      children: [
+        const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+        CircularProgressIndicator(color: greenColor, backgroundColor: greenColor.withOpacity(0.2), strokeAlign: BorderSide.strokeAlignInside),
+        const SizedBox(height: CustomSizes.SPACE_DEFAULT),
+        Text("Please wait few seconds", style: Theme.of(context).textTheme.bodyLarge)
+      ],
+    );
+  }
+
+  /* BOTTOM SHEET ERROR */
+  Widget _bottomSheetError({ required BuildContext context, required String title, required String body }){
+    final redColor = context.isDarkMode ? CustomColors.RED_LIGHT : CustomColors.RED_DARK;
+    return Column(
+        children: [
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+          Container(
+            width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5,
+            height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+              color: redColor.withOpacity(0.2),
+            ),
+            child: AvatarGlow(
+              glowCount: 3,
+              glowColor: redColor.withOpacity(0.1),
+              glowRadiusFactor: 0.2,
+              child: Icon(
+                  Iconsax.close_circle,
+                  size: CustomSizes.SPACE_BETWEEN_SECTIONS,
+                  color: redColor
+              ),
+            ),
+          ),
+          const SizedBox(height: CustomSizes.SPACE_DEFAULT * 1.5),
+          Text(title, style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+          Text(body, style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.normal, letterSpacing: 0.2), textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.5, child: StoreCustomElevatedBtn(onPressed: Get.back, bgColor: redColor, text: "Close"))
+        ]);
+  }
+
+  /* BOTTOM SHEET SUCCESS */
+  Widget _bottomSheetSuccess({ required BuildContext context, required String title, required String body }){
+    final greenColor = context.isDarkMode ? CustomColors.GREEN_LIGHT : CustomColors.GREEN_DARK;
+    return Column(
+        children: [
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS),
+          Container(
+            width: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5,
+            height: CustomSizes.SPACE_BETWEEN_SECTIONS * 2.5,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(CustomSizes.SPACE_DEFAULT * 2),
+              color: greenColor.withOpacity(0.2),
+            ),
+            child: AvatarGlow(
+              glowCount: 3,
+              glowColor: greenColor.withOpacity(0.1),
+              glowRadiusFactor: 0.2,
+              child: Icon(
+                  Iconsax.user_edit,
+                  size: CustomSizes.SPACE_BETWEEN_SECTIONS,
+                  color: greenColor
+              ),
+            ),
+          ),
+          const SizedBox(height: CustomSizes.SPACE_DEFAULT * 2),
+          Text(title, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+          Text(body, style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.normal, letterSpacing: 0.2), textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
+          const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.5, child: StoreCustomElevatedBtn(onPressed: Get.back, bgColor: greenColor, text: "Close"))
+        ]);
   }
 
   /* BOTTOM SHEET DIALOG */
