@@ -2,6 +2,7 @@ import 'package:alhawta/new_product/widgets/new_product_custom_elevated_btn.dart
 import 'package:alhawta/new_product/widgets/new_product_custom_step_1.dart';
 import 'package:alhawta/new_product/widgets/new_product_custom_step_2.dart';
 import 'package:alhawta/new_product/widgets/new_product_custom_step_3.dart';
+import 'package:alhawta/new_product/widgets/new_product_custom_step_4.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:alhawta/utils/extensions/validator.dart';
@@ -67,9 +68,9 @@ class NewProductScreen extends CustomState {
                             if(controller.currentStep.value > 0) const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS /2),
                             Expanded(child: NewProductCustomElevatedBtn(
                                     onPressed: controller.onContinue,
-                                    bgColor: controller.currentStep.value != 2 ? grayColor(context) : greenColor(context),
+                                    bgColor: controller.currentStep.value != 3 ? grayColor(context) : greenColor(context),
                                     textColor: darkDarkLightLightColor(context),
-                                    text: controller.currentStep.value == 2 ? "Submit" : "Continue"
+                                    text: controller.currentStep.value == 3 ? "Submit" : "Continue"
                                 )),
                           ]
                       ),
@@ -110,6 +111,12 @@ class NewProductScreen extends CustomState {
                             sizes: controller.sizes,
                             categories: controller.categories,
                           )
+                        ),
+                        Step(
+                          title: const Text("Announce type"),
+                          isActive: controller.currentStep.value >= 3,
+                          state: controller.currentStep.value  > 3 ? StepState.complete : StepState.disabled,
+                          content: const NewProductCustomStep4()
                         ),
                       ]
                   ),

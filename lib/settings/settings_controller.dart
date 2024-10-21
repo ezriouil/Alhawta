@@ -28,6 +28,7 @@ class SettingsController extends GetxController {
   // - - - - - - - - - - - - - - - - - - UPDATE THEME SWITCH BTN - - - - - - - - - - - - - - - - - -  //
   void onUpdateThemeColor(bool value){
     switchBtnEnableDarkTheme.value = value;
+    Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
   }
 
   // - - - - - - - - - - - - - - - - - - UPDATE HIDE LOGIN SWITCH BTN - - - - - - - - - - - - - - - - - -  //
@@ -97,7 +98,7 @@ class SettingsController extends GetxController {
                   child: SettingsCustomElevatedBtn(
                     onPressed: (){ Get.back(); },
                     text: "Dismiss",
-                    bgColor: CustomColors.GRAY_LIGHT,
+                      bgColor: context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK
 
                   ),
                 ),
@@ -182,8 +183,7 @@ class SettingsController extends GetxController {
                   child: SettingsCustomElevatedBtn(
                     onPressed: (){ Get.back(); },
                     text: "Dismiss",
-                    bgColor: CustomColors.GRAY_LIGHT,
-
+                    bgColor: context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK
                   ),
                 ),
                 const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 2),

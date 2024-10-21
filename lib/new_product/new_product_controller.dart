@@ -285,9 +285,10 @@ class NewProductController extends GetxController with WidgetsBindingObserver {
       currentStep.value++;
     }
     else if(currentStep.value == 1){
-      if(fromState.currentState!.validate()) return;
+      if(!fromState.currentState!.validate()) return;
       currentStep.value++;
     }
+    else if(currentStep.value == 2){ currentStep.value++; }
     else { onInsertNewProduct(); }
   }
 

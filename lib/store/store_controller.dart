@@ -42,7 +42,7 @@ class StoreController extends GetxController {
   void onUpdateBottomSheet({required Product product, required BuildContext context}) async{
     const Duration duration = Duration(milliseconds: 800);
     Get.bottomSheet(
-        enableDrag: true,
+        enableDrag: false,
         useRootNavigator: false,
         isScrollControlled: true,
         isDismissible: false,

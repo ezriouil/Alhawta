@@ -38,7 +38,6 @@ import 'package:get/get.dart';
 
 import 'home/home_controller.dart';
 
-
 void main() async {
 
   // - - - - - - - - - - - - - - - - - - INITIALISATION WIDGETS - - - - - - - - - - - - - - - - - -  //
