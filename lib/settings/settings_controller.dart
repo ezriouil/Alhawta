@@ -1,28 +1,30 @@
 import 'package:alhawta/settings/widgets/settings_custom_elevated_btn.dart';
 import 'package:alhawta/utils/constants/custom_colors.dart';
+import 'package:alhawta/utils/constants/custom_images.dart';
 import 'package:alhawta/utils/constants/custom_sizes.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class SettingsController extends GetxController {
 
   // - - - - - - - - - - - - - - - - - - CREATE STATES - - - - - - - - - - - - - - - - - -  //
-  late RxBool switchBtnEnableArabicLang, switchBtnEnableDarkTheme, switchBtnEnableHideLoginScreen;
+  late RxBool switchBtnEnableNotifications, switchBtnEnableDarkTheme, switchBtnEnableHideLoginScreen;
 
   // - - - - - - - - - - - - - - - - - - INIT STATES - - - - - - - - - - - - - - - - - -  //
   @override
   void onInit() {
     super.onInit();
-    switchBtnEnableArabicLang = false.obs;
+    switchBtnEnableNotifications = true.obs;
     switchBtnEnableDarkTheme = false.obs;
-    switchBtnEnableHideLoginScreen = false.obs;
+    switchBtnEnableHideLoginScreen = true.obs;
   }
 
   // - - - - - - - - - - - - - - - - - - UPDATE TO ARABIC LANG SWITCH BTN - - - - - - - - - - - - - - - - - -  //
-  void onUpdateLanguageColor(bool value){
-    switchBtnEnableArabicLang.value = value;
+  void onEnableNotifications(bool value){
+    switchBtnEnableNotifications.value = value;
   }
 
   // - - - - - - - - - - - - - - - - - - UPDATE THEME SWITCH BTN - - - - - - - - - - - - - - - - - -  //
@@ -127,7 +129,7 @@ class SettingsController extends GetxController {
     barrierDismissible: false,
     builder: (BuildContext innerContext) => AlertDialog(
       content: SizedBox(
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -204,7 +206,73 @@ class SettingsController extends GetxController {
     ));
   }
 
-  void onSubscription(BuildContext context) {
-    Get.defaultDialog();
+  void onSubscription(BuildContext context) async{
+    await showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext innerContext) => AlertDialog(
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      context.isDarkMode
+                          ? Image.asset(CustomImages.CIH_BANK_LOGO, width: 80, fit: BoxFit.cover, color: CustomColors.WHITE)
+                          : Image.asset(CustomImages.CIH_BANK_LOGO, width: 80, fit: BoxFit.cover),
+                      Container(
+                          padding:  const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 2, horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                              border: Border.all(color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK, width: 0.5)
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Sold : 00", style: Theme.of(context).textTheme.titleLarge),
+                              const SizedBox(width: CustomSizes.SPACE_BETWEEN_ITEMS / 4),
+                              Icon(Iconsax.dollar_circle, size: 18, color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK)
+                            ],
+                          )
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: CustomSizes.SPACE_BETWEEN_SECTIONS),
+                  InkWell(
+                    onTap: () async{
+                      await Clipboard.setData(const ClipboardData(text: "**** **** **** ****"));
+                      Get.snackbar("Coped", "OK", snackPosition: SnackPosition.BOTTOM);
+                    },
+                    borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                    child: Container(
+                        padding:  const EdgeInsets.symmetric(vertical: CustomSizes.SPACE_BETWEEN_ITEMS / 2, horizontal: CustomSizes.SPACE_BETWEEN_ITEMS),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(CustomSizes.SPACE_BETWEEN_ITEMS / 2),
+                            border: Border.all(color: context.isDarkMode ? CustomColors.WHITE : CustomColors.BLACK, width: 0.5)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text("RIB", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK )),
+                            Text("0000 1111 2222 3333", style: Theme.of(context).textTheme.bodyLarge),
+                            AvatarGlow(
+                                glowColor: context.isDarkMode ? CustomColors.GRAY_LIGHT.withOpacity(0.1) : CustomColors.GRAY_DARK.withOpacity(0.1),
+                                curve: Curves.bounceInOut,
+                                glowRadiusFactor: 0.3,
+                                child: Icon(Iconsax.copy, size: 20, color: context.isDarkMode ? CustomColors.GRAY_LIGHT : CustomColors.GRAY_DARK)
+                            )
+                          ],
+                        )
+                    ),
+                  ),
+                ],
+              ),
+            )
+        )
+    );
   }
 }
